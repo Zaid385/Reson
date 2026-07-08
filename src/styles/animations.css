@@ -1,0 +1,10 @@
+/* Placeholder for micro-animations */
+@keyframes trigger-flash {
+  0% { transform: scale(1); filter: brightness(1); }
+  10% { transform: scale(0.95); filter: brightness(1.5); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.animate-trigger-flash {
+  animation: trigger-flash 150ms ease-out;
+}
