@@ -6,16 +6,19 @@ export interface PadWaveformThumbnailProps {
 }
 
 export const PadWaveformThumbnail: React.FC<PadWaveformThumbnailProps> = ({ color, peaks }) => {
-  // Simple SVG renderer for peaks (just drawing a line or bars)
-  // For now, if empty peaks, don't render or render placeholder
   if (!peaks || peaks.length === 0) return null
 
-  // Normalize and draw SVG paths...
+  const pathD = peaks.map((p, i) => {
+    const x = (i / (peaks.length - 1)) * 100
+    // p is [0, 1], we draw symmetric around 50%
+    const height = p * 100
+    return `M ${x}% ${50 - height / 2}% L ${x}% ${50 + height / 2}%`
+  }).join(' ')
+
   return (
-    <div className="absolute inset-0 pointer-events-none opacity-30 p-2 overflow-hidden flex items-center justify-center">
-      <svg width="100%" height="50%" preserveAspectRatio="none">
-        {/* Placeholder for actual path */}
-        <rect width="100%" height="2px" y="50%" fill={color} />
+    <div className="absolute inset-0 pointer-events-none opacity-40 p-2 overflow-hidden">
+      <svg width="100%" height="100%" preserveAspectRatio="none">
+        <path d={pathD} stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.8" />
       </svg>
     </div>
   )

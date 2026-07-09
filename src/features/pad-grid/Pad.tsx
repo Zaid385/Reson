@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useStore } from '@state/store'
 import { PadWaveformThumbnail } from './PadWaveformThumbnail'
 import { PadBadge } from './PadBadge'
+import { useAsset } from '@hooks/useAsset'
+import { sampleAssignmentService } from '@domain/sample-assignment/SampleAssignmentService'
 
 interface PadProps {
   bankId: string
@@ -23,6 +25,9 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const isSelected = useStore(state => state.selectedPadId === padId)
   const selectPad = useStore(state => state.selectPad)
 
+  const asset = useAsset(padData?.assetId || null)
+  const [isDragOver, setIsDragOver] = useState(false)
+
   const keyLabel = keyMapLabels[slotIndex] || ''
 
   if (!padData) return null
@@ -33,6 +38,7 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const borderClass = isEmpty ? 'border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)]' : 'border-2'
   const scaleClass = isTriggered ? 'scale-[0.95]' : 'scale-100 shadow-[0_4px_12px_rgba(0,0,0,0.5)]'
   const ringClass = isSelected ? 'ring-2 ring-[var(--accent-cyan)] ring-offset-2 ring-offset-[var(--bg-base)]' : ''
+  const dragClass = isDragOver ? 'ring-4 ring-[var(--accent-cyan)] opacity-80' : ''
 
   const dynamicStyles: React.CSSProperties = {
     borderColor: !isEmpty ? categoryColor : undefined,
@@ -43,12 +49,59 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
     transitionDuration: isTriggered ? '0ms' : '150ms'
   }
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = () => {
+    setIsDragOver(false)
+  }
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    
+    // Check if it's a file drop
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0]
+      if (!isEmpty) {
+        const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
+        if (confirmBeforeReplace) {
+          const confirmed = window.confirm(`Replace sample on Pad ${keyLabel}?`)
+          if (!confirmed) return
+        }
+      }
+      await sampleAssignmentService.assignFileToPad(file, padId)
+      return
+    }
+
+    // Check if it's a built-in sample drop from the Sample Browser
+    const sampleId = e.dataTransfer.getData('application/reson-sample-id')
+    const sampleName = e.dataTransfer.getData('application/reson-sample-name')
+    const sampleUrl = e.dataTransfer.getData('application/reson-sample-url')
+
+    if (sampleId && sampleUrl) {
+      if (!isEmpty) {
+        const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
+        if (confirmBeforeReplace) {
+          const confirmed = window.confirm(`Replace sample on Pad ${keyLabel}?`)
+          if (!confirmed) return
+        }
+      }
+      await sampleAssignmentService.assignBuiltInSampleToPad(sampleId, sampleName, sampleUrl, padId)
+    }
+  }
+
   return (
     <div 
-      className={`relative w-full aspect-square rounded-lg flex flex-col justify-between p-2 cursor-pointer transition-all select-none ${borderClass} ${scaleClass} ${ringClass}`}
+      className={`relative w-full aspect-square rounded-lg flex flex-col justify-between p-2 cursor-pointer transition-all select-none ${borderClass} ${scaleClass} ${ringClass} ${dragClass}`}
       style={dynamicStyles}
       data-pad-id={padId}
       onClick={() => selectPad(padId)}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       <div className="flex justify-between w-full z-10 pointer-events-none">
         <span className={`text-xs font-mono font-medium ${isEmpty ? 'text-[var(--text-disabled)]' : 'text-[var(--text-secondary)]'}`}>
@@ -60,13 +113,14 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
       </div>
 
       {isEmpty && (
-        <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-30 pointer-events-none">
           <span className="text-2xl text-[var(--text-disabled)]">+</span>
+          {isDragOver && <span className="text-[10px] uppercase text-[var(--accent-cyan)] font-bold mt-1">Drop Sample</span>}
         </div>
       )}
 
-      {!isEmpty && (
-        <PadWaveformThumbnail color={categoryColor} peaks={[]} />
+      {!isEmpty && asset && (
+        <PadWaveformThumbnail color={categoryColor} peaks={asset.waveformPeaksLow} />
       )}
 
       <div className="flex justify-between items-end w-full z-10 pointer-events-none">
