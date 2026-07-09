@@ -18,21 +18,18 @@ export class AudioEngineImpl implements IAudioEngine {
     this.bufferRegistry = new BufferRegistry()
     this.masterBus = new MasterBus()
     
-    // Initialize 128 pad buses statically for all 4 banks
-    const padBusesMap = new Map<string, Tone.InputNode>()
-    const prefixes = ['A', 'B', 'C', 'D']
-    for (const prefix of prefixes) {
-      for (let i = 1; i <= 32; i++) {
-        const id = `${prefix}${i.toString().padStart(2, '0')}`
-        const padBus = new PadBus()
-        padBus.connect(this.masterBus.volumeNode)
-        this.padBuses.set(id, padBus)
-        padBusesMap.set(id, padBus.volumeNode)
-      }
-    }
-
-    this.voiceManager = new VoiceManager(this.bufferRegistry, padBusesMap)
+    // We will dynamically allocate pad buses as needed
+    this.voiceManager = new VoiceManager(this.bufferRegistry, (padId) => this.getPadBus(padId).volumeNode)
     this.previewPlayer = new PreviewPlayer(this.bufferRegistry, this.masterBus.volumeNode)
+  }
+
+  private getPadBus(padId: string): PadBus {
+    if (!this.padBuses.has(padId)) {
+      const bus = new PadBus()
+      bus.connect(this.masterBus.volumeNode)
+      this.padBuses.set(padId, bus)
+    }
+    return this.padBuses.get(padId)!
   }
 
   async initialize(): Promise<void> {
@@ -68,15 +65,15 @@ export class AudioEngineImpl implements IAudioEngine {
   }
 
   setPadVolume(padId: string, volume: number): void {
-    this.padBuses.get(padId)?.setVolume(volume)
+    this.getPadBus(padId).setVolume(volume)
   }
 
   setPadPan(padId: string, pan: number): void {
-    this.padBuses.get(padId)?.setPan(pan)
+    this.getPadBus(padId).setPan(pan)
   }
 
   setPadMute(padId: string, muted: boolean): void {
-    this.padBuses.get(padId)?.setMute(muted)
+    this.getPadBus(padId).setMute(muted)
   }
 
   setMasterVolume(volume: number): void {

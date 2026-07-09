@@ -6,6 +6,8 @@ import { AudioEngine } from '@audio-engine'
 import { useStore } from '@state/store'
 import { projectBootstrapService } from '@persistence/ProjectBootstrapService'
 
+import { audioHydrationService } from '@domain/project/AudioHydrationService'
+
 export function App() {
   const [isReady, setIsReady] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
@@ -25,33 +27,8 @@ export function App() {
       store._initBanks(snapshot.banks, snapshot.banks[0]?.id)
       store._initPads(snapshot.pads)
       
-      // We will eventually hydrate AudioEngine with real user samples here,
-      // but for now, generate synthetic test sounds if they're assigned to pads.
-      // E.g., pad 0 and 1 were given test-kick and test-hat in the previous phase.
-      // If we see those assetIds, we can recreate the synthetic buffers.
-      const hasTestKick = snapshot.pads.some(p => p.assetId === 'test-kick')
-      const hasTestHat = snapshot.pads.some(p => p.assetId === 'test-hat')
-      
-      const ctx = new AudioContext()
-      if (hasTestKick) {
-        const bufKick = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate)
-        const dataKick = bufKick.getChannelData(0)
-        for (let i = 0; i < dataKick.length; i++) {
-          const t = i / ctx.sampleRate
-          dataKick[i] = Math.sin(2 * Math.PI * 150 * t * Math.exp(-t * 20)) * Math.exp(-t * 10)
-        }
-        AudioEngine.registerBuffer('test-kick', bufKick)
-      }
-      
-      if (hasTestHat) {
-        const bufHat = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate)
-        const dataHat = bufHat.getChannelData(0)
-        for (let i = 0; i < dataHat.length; i++) {
-          const t = i / ctx.sampleRate
-          dataHat[i] = (Math.random() * 2 - 1) * Math.exp(-t * 40)
-        }
-        AudioEngine.registerBuffer('test-hat', bufHat)
-      }
+      // Hydrate all actual audio buffers into the Engine
+      await audioHydrationService.hydratePads(snapshot.pads)
 
       setIsReady(true)
     }

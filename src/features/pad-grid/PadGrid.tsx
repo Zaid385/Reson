@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useStore } from '@state/store'
 import { Pad } from './Pad'
 import { sampleAssignmentService } from '@domain/sample-assignment/SampleAssignmentService'
+import { PadContextMenu } from './PadContextMenu'
 
 export const PadGrid: React.FC = () => {
   const activeBankId = useStore(state => state.activeBankId)
   const pads = useStore(state => state.pads)
   const [isDragOver, setIsDragOver] = useState(false)
-  
+  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, padId: string } | null>(null)
+
+  const handleContextMenu = useCallback((e: React.MouseEvent, padId: string) => {
+    e.preventDefault()
+    setContextMenu({ x: e.clientX, y: e.clientY, padId })
+  }, [])
+
   if (!activeBankId) return null
 
   const padIndices = Array.from({ length: 32 }, (_, i) => i)
@@ -46,15 +53,31 @@ export const PadGrid: React.FC = () => {
   }
 
   return (
-    <div 
-      className={`grid grid-cols-8 gap-2 w-full max-w-[1400px] mx-auto p-8 flex-1 content-center transition-colors ${isDragOver ? 'bg-[var(--bg-surface-raised)] rounded-2xl' : ''}`}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-      {padIndices.map(index => (
-        <Pad key={`${activeBankId}:${index}`} bankId={activeBankId} slotIndex={index} />
-      ))}
-    </div>
+    <>
+      <div 
+        className={`grid grid-cols-8 gap-2 w-full max-w-[1400px] mx-auto p-8 flex-1 content-center transition-colors ${isDragOver ? 'bg-[var(--bg-surface-raised)] rounded-2xl' : ''}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {padIndices.map(index => {
+          const padId = `${activeBankId}:${index}`
+          return (
+            <div key={padId} onContextMenu={(e) => handleContextMenu(e, padId)}>
+              <Pad bankId={activeBankId} slotIndex={index} />
+            </div>
+          )
+        })}
+      </div>
+      
+      {contextMenu && (
+        <PadContextMenu 
+          x={contextMenu.x} 
+          y={contextMenu.y} 
+          padId={contextMenu.padId} 
+          onClose={() => setContextMenu(null)} 
+        />
+      )}
+    </>
   )
 }

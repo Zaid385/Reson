@@ -69,7 +69,7 @@ export class SampleAssignmentService {
 
   async assignBuiltInSampleToPad(sampleId: string, sampleName: string, sampleUrl: string, padId: string): Promise<void> {
     try {
-      const response = await fetch(sampleUrl)
+      const response = await fetch(`${sampleUrl}?v=1`)
       if (!response.ok) throw new Error('Failed to fetch built-in sample')
       
       const arrayBuffer = await response.arrayBuffer()
@@ -102,6 +102,31 @@ export class SampleAssignmentService {
 
     } catch (e) {
       console.error('Failed to assign built-in sample', e)
+    }
+  }
+
+  async assignExistingAssetToPad(assetId: string, padId: string): Promise<void> {
+    try {
+      const asset = await assetRepository.getAsset(assetId)
+      if (!asset) return
+
+      const store = useStore.getState()
+      const pad = store.pads[padId]
+      if (pad?.assetId) {
+        await assetRepository.decrementRefCount(pad.assetId)
+      }
+
+      await assetRepository.incrementRefCount(assetId)
+
+      store.updatePad(padId, {
+        assetId,
+        displayName: asset.name,
+        startMarker: 0,
+        endMarker: 1,
+        reverse: false
+      })
+    } catch (e) {
+      console.error('Failed to assign existing asset', e)
     }
   }
 

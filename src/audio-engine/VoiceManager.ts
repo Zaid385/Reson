@@ -11,14 +11,14 @@ export class VoiceManager {
   
   constructor(
     private bufferRegistry: BufferRegistry,
-    private padBuses: Map<string, Tone.InputNode>
+    private getPadDestination: (padId: string) => Tone.InputNode
   ) {}
 
   playVoice(padId: string, params: PadPlaybackParams, velocity: number = 1): VoiceHandle | null {
     const toneBuffer = this.bufferRegistry.getBuffer(params.assetId, params.reverse)
     if (!toneBuffer) return null
 
-    const destination = this.padBuses.get(padId)
+    const destination = this.getPadDestination(padId)
     if (!destination) return null
     
     this.enforceLimits(padId)

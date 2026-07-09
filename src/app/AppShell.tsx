@@ -7,6 +7,7 @@ import { useKeyboardController } from '@hooks/useKeyboardController'
 import { usePointerRollController } from '@hooks/usePointerRollController'
 import { useAudioEngineBinding } from '@hooks/useAudioEngineBinding'
 import { useAutosave } from '@hooks/useAutosave'
+import { SampleEditorModal } from '@features/sample-editor'
 
 export function AppShell() {
   useKeyboardController()
@@ -25,6 +26,7 @@ export function AppShell() {
         <ParameterPanel />
       </div>
       <FooterBar />
+      <SampleEditorModal />
     </div>
   )
 }

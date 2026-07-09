@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { AudioEngine } from '@audio-engine'
+import { SoloMuteResolver } from '@audio-engine/SoloMuteResolver'
 import { useStore } from '@state/store'
 
 export function useAudioEngineBinding() {
@@ -8,18 +9,40 @@ export function useAudioEngineBinding() {
   
   useEffect(() => {
     const unsubPads = useStore.subscribe((state, prevState) => {
-      // In a more granular implementation, we'd only react to specific pad changes
-      // For now, if a pad's volume/pan/mute changes, we update the engine
       if (state.pads !== prevState.pads) {
-        for (const [id, pad] of Object.entries(state.pads)) {
-          const prevPad = prevState.pads[id]
+        
+        // 1. Resolve Mute/Solo logic
+        const padList = Object.values(state.pads)
+        const anySoloChanged = padList.some(p => p.solo !== prevState.pads[p.id]?.solo)
+        const anyMuteChanged = padList.some(p => p.mute !== prevState.pads[p.id]?.mute)
+        
+        let resolvedAudibility: Map<string, boolean> | null = null
+        if (anySoloChanged || anyMuteChanged || Object.keys(state.pads).length !== Object.keys(prevState.pads).length) {
+          resolvedAudibility = SoloMuteResolver.resolve(padList)
+        }
+
+        // 2. Iterate and apply changes
+        for (const pad of padList) {
+          const prevPad = prevState.pads[pad.id]
           if (!prevPad) continue
           
-          if (pad.volume !== prevPad.volume) AudioEngine.setPadVolume(id, pad.volume)
-          if (pad.pan !== prevPad.pan) AudioEngine.setPadPan(id, pad.pan)
-          if (pad.mute !== prevPad.mute) AudioEngine.setPadMute(id, pad.mute)
-          // Solo requires re-evaluating the SoloMuteResolver, which we haven't wired 
-          // fully at the global level yet, but AudioEngine exposes setPadMute
+          if (pad.volume !== prevPad.volume) AudioEngine.setPadVolume(pad.id, pad.volume)
+          if (pad.pan !== prevPad.pan) AudioEngine.setPadPan(pad.id, pad.pan)
+          
+          if (resolvedAudibility) {
+            const isAudible = resolvedAudibility.get(pad.id)
+            AudioEngine.setPadMute(pad.id, !isAudible)
+          }
+        }
+      }
+      
+      // Master settings binding
+      if (state.settings && prevState.settings && state.settings !== prevState.settings) {
+        if (state.settings.masterVolume !== prevState.settings.masterVolume) {
+          AudioEngine.setMasterVolume(state.settings.masterVolume)
+        }
+        if (state.settings.masterMute !== prevState.settings.masterMute) {
+          AudioEngine.setMasterMute(state.settings.masterMute)
         }
       }
     })

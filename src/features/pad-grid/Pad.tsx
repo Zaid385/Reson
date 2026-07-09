@@ -81,7 +81,7 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
     const sampleName = e.dataTransfer.getData('application/reson-sample-name')
     const sampleUrl = e.dataTransfer.getData('application/reson-sample-url')
 
-    if (sampleId && sampleUrl) {
+    if (sampleId) {
       if (!isEmpty) {
         const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
         if (confirmBeforeReplace) {
@@ -89,7 +89,12 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
           if (!confirmed) return
         }
       }
-      await sampleAssignmentService.assignBuiltInSampleToPad(sampleId, sampleName, sampleUrl, padId)
+      
+      if (sampleUrl) {
+        await sampleAssignmentService.assignBuiltInSampleToPad(sampleId, sampleName, sampleUrl, padId)
+      } else {
+        await sampleAssignmentService.assignExistingAssetToPad(sampleId, padId)
+      }
     }
   }
 
@@ -136,6 +141,22 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
           </span>
         )}
       </div>
+
+      {/* Hover Actions */}
+      {!isEmpty && (
+        <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center z-20 rounded-lg">
+          <button 
+            className="p-2 bg-[var(--bg-elevated)] rounded-full text-white hover:text-[var(--accent-cyan)] transition-colors transform hover:scale-110 shadow-lg"
+            onClick={(e) => {
+              e.stopPropagation()
+              selectPad(padId)
+              useStore.getState().openModal('sampleEditor', padId)
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 Z"></path></svg>
+          </button>
+        </div>
+      )}
     </div>
   )
 }

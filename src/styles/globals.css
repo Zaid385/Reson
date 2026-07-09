@@ -33,5 +33,5 @@
   }
   .label-caps {
     @apply font-mono text-[11px] font-bold tracking-[0.1em] uppercase text-[var(--text-secondary)];
-  }
+}
 }

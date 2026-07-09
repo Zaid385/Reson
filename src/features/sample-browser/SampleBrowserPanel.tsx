@@ -42,22 +42,36 @@ export const SampleBrowserPanel: React.FC = () => {
     }
 
     if (activeTab === 'built-in' && url) {
-      // Need to register buffer if not already
       try {
-        const response = await fetch(url)
+        const response = await fetch(`${url}?v=1`)
         const arrayBuffer = await response.arrayBuffer()
-        // we need a context to decode, AudioEngine has resumeContext, but we can just use temp
         const ctx = new AudioContext()
         const audioBuffer = await ctx.decodeAudioData(arrayBuffer)
         AudioEngine.registerBuffer(sampleId, audioBuffer)
-        AudioEngine.previewPlay(sampleId, { startMarker: 0, endMarker: 1, reverse: false, volume: 1, pan: 0, pitchSemitones: 0 })
+        AudioEngine.previewPlay(sampleId, { startMarker: 0, endMarker: 1, reverse: false, loop: false, pitchSemitones: 0, gainDb: 0, fadeInMs: 0, fadeOutMs: 0 })
         setPreviewingId(sampleId)
       } catch (e) {
         console.error('Preview failed', e)
       }
     } else if (activeTab === 'user') {
-      AudioEngine.previewPlay(sampleId, { startMarker: 0, endMarker: 1, reverse: false, volume: 1, pan: 0, pitchSemitones: 0 })
-      setPreviewingId(sampleId)
+      try {
+        // If it's not registered in the engine, hydrate it on-demand
+        // We'll peek if it's there. Actually we can't easily peek, 
+        // but let's just attempt to load it from DB and register if we know we need to.
+        // It's safer to just fetch and decode it if we need to.
+        const asset = await assetRepository.getAsset(sampleId)
+        if (asset && asset.audioData) {
+          const arrayBuffer = await asset.audioData.arrayBuffer()
+          const ctx = new AudioContext()
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer)
+          AudioEngine.registerBuffer(sampleId, audioBuffer)
+        }
+        
+        AudioEngine.previewPlay(sampleId, { startMarker: 0, endMarker: 1, reverse: false, loop: false, pitchSemitones: 0, gainDb: 0, fadeInMs: 0, fadeOutMs: 0 })
+        setPreviewingId(sampleId)
+      } catch (e) {
+        console.error('User sample preview failed', e)
+      }
     }
   }
 
