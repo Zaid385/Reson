@@ -6,11 +6,13 @@ import { FooterBar } from '@features/footer'
 import { useKeyboardController } from '@hooks/useKeyboardController'
 import { usePointerRollController } from '@hooks/usePointerRollController'
 import { useAudioEngineBinding } from '@hooks/useAudioEngineBinding'
+import { useAutosave } from '@hooks/useAutosave'
 
 export function AppShell() {
   useKeyboardController()
   usePointerRollController()
   useAudioEngineBinding()
+  useAutosave()
   
   return (
     <div className="flex flex-col h-screen w-screen bg-bg-base overflow-hidden">

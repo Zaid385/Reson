@@ -1,0 +1,25 @@
+{
+  "packs": [
+    {
+      "id": "acoustic-kit",
+      "name": "Acoustic Kit",
+      "samples": [
+        {
+          "id": "acoustic-kit/kick",
+          "name": "Kick",
+          "url": "/samples/acoustic-kit/kick.wav"
+        },
+        {
+          "id": "acoustic-kit/snare",
+          "name": "Snare",
+          "url": "/samples/acoustic-kit/snare.wav"
+        },
+        {
+          "id": "acoustic-kit/hihat-closed",
+          "name": "HiHat Closed",
+          "url": "/samples/acoustic-kit/hihat-closed.wav"
+        }
+      ]
+    }
+  ]
+}

@@ -30,3 +30,43 @@ export interface BankData {
   index: number
   name: string
 }
+
+export interface ProjectData {
+  id: string
+  name: string
+  schemaVersion: number
+  createdAt: number
+  updatedAt: number
+  isActive: boolean
+}
+
+export interface AssetData {
+  id: string
+  name: string
+  sourceType: 'built-in' | 'user-upload'
+  audioData?: Blob
+  mimeType: string
+  durationSeconds: number
+  waveformPeaksLow: number[]
+  waveformPeaksHigh: number[]
+  refCount: number
+  createdAt: number
+  fileSizeBytes: number
+}
+
+export interface SettingsData {
+  projectId: string
+  masterVolume: number
+  masterMute: boolean
+  confirmBeforeReplace: boolean
+  keyboardMappingMode: 'physical' | 'printed'
+  themeDensity: 'compact' | 'comfortable'
+  hasSeenOnboarding: boolean
+}
+
+export interface FullProjectSnapshot {
+  project: ProjectData
+  settings: SettingsData
+  banks: BankData[]
+  pads: PadData[]
+}

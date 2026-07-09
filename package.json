@@ -19,6 +19,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tone": "^15.1.22",
+    "uuid": "^14.0.1",
     "wavesurfer.js": "^7.12.10",
     "zustand": "^5.0.14"
   },
@@ -32,6 +33,7 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.5.2",
     "eslint": "^10.6.0",
