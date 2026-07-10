@@ -31,7 +31,7 @@ describe('VoiceManager', () => {
     const padBuses = new Map()
     padBuses.set('A01', {})
     
-    const vm = new VoiceManager(registry, padBuses)
+    const vm = new VoiceManager(registry, (padId) => padBuses.get(padId))
     const params: PadPlaybackParams = {
       assetId: 'asset-1', startMarker: 0, endMarker: 1, reverse: false, loop: false,
       pitchSemitones: 0, gainDb: 0, attackMs: 0, releaseMs: 0, fadeInMs: 0, fadeOutMs: 0, playMode: 'oneshot'

@@ -22,6 +22,14 @@ export class AssetRepository {
     return db.assets.get(assetId)
   }
 
+  async findExistingAsset(name: string, fileSizeBytes: number, durationSeconds: number): Promise<AssetData | undefined> {
+    const assets = await db.assets
+      .where('sourceType').equals('user-upload')
+      .and(a => a.name === name && a.fileSizeBytes === fileSizeBytes && a.durationSeconds === durationSeconds)
+      .toArray()
+    return assets[0]
+  }
+
   async incrementRefCount(assetId: string): Promise<void> {
     const asset = await db.assets.get(assetId)
     if (asset) {

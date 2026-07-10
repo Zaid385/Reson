@@ -4,6 +4,7 @@ import { PadWaveformThumbnail } from './PadWaveformThumbnail'
 import { PadBadge } from './PadBadge'
 import { useAsset } from '@hooks/useAsset'
 import { sampleAssignmentService } from '@domain/sample-assignment/SampleAssignmentService'
+import { showConfirmDialog } from '@utils/dialog'
 
 interface PadProps {
   bankId: string
@@ -68,7 +69,12 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
       if (!isEmpty) {
         const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
         if (confirmBeforeReplace) {
-          const confirmed = window.confirm(`Replace sample on Pad ${keyLabel}?`)
+          const confirmed = await showConfirmDialog({
+            title: 'Replace Sample',
+            message: `Are you sure you want to replace the sample on Pad ${keyLabel}?`,
+            confirmText: 'Replace',
+            isDanger: true
+          })
           if (!confirmed) return
         }
       }
@@ -85,7 +91,12 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
       if (!isEmpty) {
         const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
         if (confirmBeforeReplace) {
-          const confirmed = window.confirm(`Replace sample on Pad ${keyLabel}?`)
+          const confirmed = await showConfirmDialog({
+            title: 'Replace Sample',
+            message: `Are you sure you want to replace the sample on Pad ${keyLabel}?`,
+            confirmText: 'Replace',
+            isDanger: true
+          })
           if (!confirmed) return
         }
       }

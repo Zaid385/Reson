@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { TopBar } from '@features/top-bar'
 import { PadGrid, PadListView } from '@features/pad-grid'
 import { SampleBrowserPanel } from '@features/sample-browser'
@@ -7,10 +8,13 @@ import { useKeyboardController } from '@hooks/useKeyboardController'
 import { usePointerRollController } from '@hooks/usePointerRollController'
 import { useAudioEngineBinding } from '@hooks/useAudioEngineBinding'
 import { useAutosave } from '@hooks/useAutosave'
-import { SampleEditorModal } from '@features/sample-editor'
-import { SettingsModal, KeyboardShortcutsModal } from '@features/settings'
 import { OnboardingOverlay } from '@features/onboarding'
 import { useStore } from '@state/store'
+import { DialogProvider } from '@components/ui/DialogProvider'
+
+const SampleEditorModal = lazy(() => import('@features/sample-editor').then(m => ({ default: m.SampleEditorModal })))
+const SettingsModal = lazy(() => import('@features/settings').then(m => ({ default: m.SettingsModal })))
+const KeyboardShortcutsModal = lazy(() => import('@features/settings').then(m => ({ default: m.KeyboardShortcutsModal })))
 
 export function AppShell() {
   useKeyboardController()
@@ -19,6 +23,7 @@ export function AppShell() {
   useAutosave()
   
   const useListView = useStore(state => state.settings?.useListView ?? false)
+  const activeModal = useStore(state => state.activeModal)
   
   return (
     <div className="flex flex-col h-screen w-screen bg-[var(--bg-base)] overflow-hidden">
@@ -31,9 +36,12 @@ export function AppShell() {
         <ParameterPanel />
       </div>
       <FooterBar />
-      <SampleEditorModal />
-      <SettingsModal />
-      <KeyboardShortcutsModal />
+      <Suspense fallback={null}>
+        {activeModal === 'sampleEditor' && <SampleEditorModal />}
+        {activeModal === 'settings' && <SettingsModal />}
+        {activeModal === 'shortcuts' && <KeyboardShortcutsModal />}
+      </Suspense>
+      <DialogProvider />
       <OnboardingOverlay />
     </div>
   )

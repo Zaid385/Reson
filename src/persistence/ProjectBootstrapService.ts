@@ -31,7 +31,7 @@ export class ProjectBootstrapService {
     }
   }
 
-  private async createAndSaveDefaultProject(): Promise<ProjectData> {
+  async createAndSaveDefaultProject(): Promise<ProjectData> {
     const project = await projectRepository.createDefaultProject()
     const now = Date.now()
 

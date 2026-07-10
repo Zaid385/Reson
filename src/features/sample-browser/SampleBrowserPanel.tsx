@@ -8,6 +8,8 @@ import { AssetData } from '@types/models'
 import { AudioEngine } from '@audio-engine'
 import { useStore } from '@state/store'
 import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
+import { liveQuery } from 'dexie'
+import { db } from '@persistence/db'
 
 export const SampleBrowserPanel: React.FC = () => {
   const isSampleBrowserOpen = useStore(state => state.isSampleBrowserOpen)
@@ -22,17 +24,25 @@ export const SampleBrowserPanel: React.FC = () => {
     builtInSampleManifest.loadManifest().then(setManifest)
   }, [])
 
-  // Poll or refresh user assets when tab changes to user
+  // Observe user assets using Dexie liveQuery so it auto-updates when samples are added
   useEffect(() => {
+    let subscription: { unsubscribe: () => void } | null = null
+
     if (activeTab === 'user') {
-      // Very naive fetch, ideally indexedDB query
-      // Dexie doesn't have an easy react hook by default without dexie-react-hooks
-      // Since we don't have dexie-react-hooks, we can just do a simple fetch
-      import('@persistence/db').then(({ db }) => {
-        db.assets.where('sourceType').equals('user-upload').toArray().then(setUserAssets)
+      subscription = liveQuery(() => 
+        db.assets.where('sourceType').equals('user-upload').toArray()
+      ).subscribe({
+        next: (assets) => setUserAssets(assets),
+        error: (err) => console.error('Failed to observe user assets:', err)
       })
     }
-  }, [activeTab, isSampleBrowserOpen]) // re-fetch when panel opens
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe()
+      }
+    }
+  }, [activeTab, isSampleBrowserOpen])
 
   if (!isSampleBrowserOpen) return null
 

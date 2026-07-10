@@ -5,7 +5,7 @@ import { CURRENT_SCHEMA_VERSION, runMigrations } from '../migrations'
 
 export class ProjectRepository {
   async getActiveProject(): Promise<ProjectData | null> {
-    const project = await db.projects.where('isActive').equals('true').first()
+    const project = await db.projects.filter(p => p.isActive === true).first()
     if (!project) return null
     
     await runMigrations(project.schemaVersion)
@@ -50,7 +50,7 @@ export class ProjectRepository {
   async setActiveProject(projectId: string): Promise<void> {
     await db.transaction('rw', db.projects, async () => {
       // Set all to false
-      await db.projects.where('isActive').equals('true').modify({ isActive: false })
+      await db.projects.filter(p => p.isActive === true).modify({ isActive: false })
       // Set target to true
       await db.projects.update(projectId, { isActive: true })
     })

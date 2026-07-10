@@ -6,6 +6,7 @@ import { EditorTransportControls } from './EditorTransportControls'
 import { NumericParamInput } from './NumericParamInput'
 import { useAsset } from '@hooks/useAsset'
 import { AudioEngine } from '@audio-engine'
+import { showConfirmDialog } from '@utils/dialog'
 
 export const SampleEditorModal: React.FC = () => {
   const activeModal = useStore(state => state.activeModal)
@@ -117,7 +118,7 @@ export const SampleEditorModal: React.FC = () => {
     closeModal()
   }
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     const hasChanged = 
       startMarker !== padData.startMarker ||
       endMarker !== padData.endMarker ||
@@ -131,8 +132,14 @@ export const SampleEditorModal: React.FC = () => {
 
     if (hasChanged) {
       const confirmBeforeReplace = useStore.getState().settings?.confirmBeforeReplace ?? true
-      if (confirmBeforeReplace && !window.confirm('Discard changes?')) {
-        return
+      if (confirmBeforeReplace) {
+        const confirmed = await showConfirmDialog({
+          title: 'Discard Changes',
+          message: 'Are you sure you want to discard your changes to this sample?',
+          confirmText: 'Discard',
+          isDanger: true
+        })
+        if (!confirmed) return
       }
     }
     
