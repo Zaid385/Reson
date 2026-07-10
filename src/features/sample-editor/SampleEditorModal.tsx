@@ -172,6 +172,7 @@ export const SampleEditorModal: React.FC = () => {
             startMarker={startMarker}
             endMarker={endMarker}
             color={padData.color || '#00F0FF'}
+            reverse={reverse}
             onRegionChange={(s, e) => {
               setStartMarker(s)
               setEndMarker(e)
@@ -200,7 +201,7 @@ export const SampleEditorModal: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="flex items-center gap-6">
             <NumericParamInput label="Pitch" value={pitch} onChange={setPitch} min={-24} max={24} step={1} unit="st" />
             <NumericParamInput label="Gain" value={gain} onChange={setGain} min={-24} max={24} step={0.1} unit="dB" />
             <NumericParamInput label="Fade In" value={fadeIn} onChange={setFadeIn} min={0} max={2000} step={10} unit="ms" />

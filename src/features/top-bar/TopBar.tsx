@@ -4,6 +4,7 @@ import { MasterVolumeControl } from './MasterVolumeControl'
 import { ThemeToggle } from '@components/controls'
 import { Settings2, FolderOpen } from 'lucide-react'
 import { useStore } from '@state/store'
+import { ResonLogo } from '@components/branding/ResonLogo'
 
 export function TopBar() {
   const openModal = useStore(state => state.openModal)
@@ -12,7 +13,10 @@ export function TopBar() {
   return (
     <header className="h-[56px] flex items-center justify-between px-4 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] shrink-0">
       <div className="flex items-center gap-6">
-        <h1 className="text-2xl font-semibold tracking-wide text-[var(--accent-cyan)]">RESON</h1>
+        <div className="flex items-center gap-3">
+          <ResonLogo size={28} animated={false} interactive={true} audioReactive={true} />
+          <h1 className="text-2xl font-semibold tracking-wide text-[var(--accent-cyan)]">RESON</h1>
+        </div>
         <BankSelector />
         <SaveStatusIndicator />
       </div>
