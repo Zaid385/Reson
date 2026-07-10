@@ -11,12 +11,7 @@ interface PadProps {
   slotIndex: number
 }
 
-const keyMapLabels = [
-  '1','2','3','4','5','6','7','8',
-  'Q','W','E','R','T','Y','U','I',
-  'A','S','D','F','G','H','J','K',
-  'Z','X','C','V','B','N','M',','
-]
+import { KeyboardLabels } from '@state/keyMap'
 
 export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const padId = `${bankId}:${slotIndex}`
@@ -29,7 +24,9 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const asset = useAsset(padData?.assetId || null)
   const [isDragOver, setIsDragOver] = useState(false)
 
-  const keyLabel = keyMapLabels[slotIndex] || ''
+  const keyboardLayout = useStore(state => state.settings?.keyboardLayout || 'qwerty')
+  const keyMapLabels = KeyboardLabels[keyboardLayout] || KeyboardLabels.qwerty
+  const keyLabel = keyMapLabels[slotIndex]
 
   if (!padData) return null
 

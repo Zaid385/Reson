@@ -25,6 +25,15 @@
   body {
     @apply bg-[var(--bg-base)] text-[var(--text-primary)] font-sans m-0 p-0 overflow-hidden;
   }
+
+  /* Hide scrollbars globally */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer utilities {

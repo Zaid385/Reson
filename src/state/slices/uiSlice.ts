@@ -5,13 +5,13 @@ export interface UiSlice {
   selectedPadId: string | null
   isSampleBrowserOpen: boolean
   isParamPanelOpen: boolean
-  activeModal: 'sampleEditor' | 'settings' | 'confirm' | 'shortcuts' | null
+  activeModal: 'sampleEditor' | 'settings' | 'confirm' | 'shortcuts' | 'projects' | null
   saveStatus: 'saved' | 'saving' | 'error'
   
   selectPad: (padId: string | null) => void
   toggleSampleBrowser: () => void
   toggleParamPanel: () => void
-  openModal: (modalName: 'sampleEditor' | 'settings' | 'confirm' | 'shortcuts', contextId?: string) => void
+  openModal: (modalName: 'sampleEditor' | 'settings' | 'confirm' | 'shortcuts' | 'projects', contextId?: string) => void
   closeModal: () => void
   setSaveStatus: (status: 'saved' | 'saving' | 'error') => void
 }

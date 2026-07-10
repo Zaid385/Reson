@@ -61,6 +61,7 @@ export interface SettingsData {
   confirmBeforeReplace: boolean
   useListView: boolean
   keyboardMappingMode: 'physical' | 'printed'
+  keyboardLayout: 'qwerty' | 'azerty' | 'qwertz'
   themeDensity: 'compact' | 'comfortable'
   hasSeenOnboarding: boolean
 }

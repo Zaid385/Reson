@@ -1,5 +1,6 @@
 import { useStore } from '@state/store'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
+import { projectRepository } from '@persistence/repositories/ProjectRepository'
 import { db } from '@persistence/db'
 import { FullProjectSnapshot, AssetData } from '@types/models'
 
@@ -91,7 +92,10 @@ export class ProjectIoService {
     const exportData: ExportFormat = {
       formatVersion: 1,
       exportedAt: new Date().toISOString(),
-      project: snapshot.project,
+      project: {
+        ...snapshot.project,
+        name: exportName
+      },
       settings: snapshot.settings,
       banks: formattedBanks,
       assets: exportedAssets
@@ -196,9 +200,18 @@ export class ProjectIoService {
         delete bank.pads
       }
 
+      // Check if current project is empty. If so, replace it by deleting it first.
+      const currentActive = await projectRepository.getActiveProject()
+      if (currentActive) {
+        const isEmpty = await projectRepository.isProjectEmpty(currentActive.id)
+        if (isEmpty) {
+          await projectRepository.deleteProject(currentActive.id)
+        }
+      }
+
       // Write everything to DB
       await db.transaction('rw', db.projects, db.settings, db.banks, db.pads, async () => {
-        // Deselect previous project
+        // Deselect previous project (if it wasn't deleted)
         await db.projects.filter(p => p.isActive).modify({ isActive: false })
         
         data.project.isActive = true

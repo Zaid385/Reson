@@ -42,6 +42,7 @@ export class ProjectBootstrapService {
       confirmBeforeReplace: true,
       useListView: false,
       keyboardMappingMode: 'physical',
+      keyboardLayout: 'qwerty',
       themeDensity: 'comfortable',
       hasSeenOnboarding: false
     }

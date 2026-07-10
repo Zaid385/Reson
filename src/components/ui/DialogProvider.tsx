@@ -2,7 +2,7 @@ import React from 'react'
 import { useDialogStore } from '@utils/dialog'
 
 export const DialogProvider: React.FC = () => {
-  const { isOpen, title, message, confirmText, cancelText, isDanger, onConfirm, onCancel } = useDialogStore()
+  const { isOpen, title, message, confirmText, cancelText, isDanger, isPrompt, promptValue, onPromptChange, onConfirm, onCancel } = useDialogStore()
 
   if (!isOpen) return null
 
@@ -20,6 +20,19 @@ export const DialogProvider: React.FC = () => {
           <p id="dialog-message" className="text-sm text-[var(--text-muted)] leading-relaxed">
             {message}
           </p>
+          {isPrompt && (
+            <input
+              type="text"
+              autoFocus
+              className="w-full bg-[var(--bg-base)] border border-[var(--border-subtle)] focus:border-[var(--accent-cyan)] focus:outline-none rounded-lg px-3 py-2 text-white"
+              value={promptValue}
+              onChange={(e) => onPromptChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') onConfirm()
+                if (e.key === 'Escape') onCancel()
+              }}
+            />
+          )}
         </div>
         
         <div className="bg-[var(--bg-surface)] px-6 py-4 border-t border-[var(--border-subtle)] flex items-center justify-end gap-3">

@@ -113,19 +113,19 @@ export const SettingsModal: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          <div className="flex-1 overflow-y-auto p-6 space-y-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             
             <section className="space-y-4">
               <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Project Management</h3>
               <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-white font-medium">Export Project</div>
                     <div className="text-sm text-[var(--text-muted)]">Download this project and all its samples as a single file.</div>
                   </div>
                   <button 
                     onClick={handleExportClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors shrink-0"
                   >
                     <Upload className="w-4 h-4" /> Export
                   </button>
@@ -133,14 +133,14 @@ export const SettingsModal: React.FC = () => {
 
                 <div className="h-px bg-[var(--border-subtle)] w-full" />
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="text-white font-medium">Import Project</div>
                     <div className="text-sm text-[var(--text-muted)]">Load a previously exported .json project file.</div>
                   </div>
                   <button 
                     onClick={handleImportClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors shrink-0"
                   >
                     <Download className="w-4 h-4" /> Import
                   </button>
@@ -161,12 +161,12 @@ export const SettingsModal: React.FC = () => {
               </h3>
               
               <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
-                <label className="flex items-center justify-between cursor-pointer">
+                <label className="flex items-center justify-between gap-4 cursor-pointer">
                   <div>
                     <div className="text-white font-medium">Confirm sample replacement</div>
                     <div className="text-sm text-[var(--text-muted)]">Show a confirmation prompt when dropping a sample onto an occupied pad.</div>
                   </div>
-                  <div className={`w-11 h-6 rounded-full transition-colors relative ${settings.confirmBeforeReplace ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
+                  <div className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${settings.confirmBeforeReplace ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
                     <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.confirmBeforeReplace ? 'translate-x-5' : 'translate-x-0'}`} />
                   </div>
                   <input 
@@ -176,6 +176,24 @@ export const SettingsModal: React.FC = () => {
                     onChange={(e) => updateSettings({ confirmBeforeReplace: e.target.checked })}
                   />
                 </label>
+
+                <div className="h-px bg-[var(--border-subtle)] w-full" />
+
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <div className="text-white font-medium">Keyboard Layout</div>
+                    <div className="text-sm text-[var(--text-muted)]">Choose the layout that matches your physical keyboard to update pad labels.</div>
+                  </div>
+                  <select 
+                    className="bg-[var(--bg-base)] border border-[var(--border-subtle)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent-cyan)] transition-colors shrink-0"
+                    value={settings.keyboardLayout || 'qwerty'}
+                    onChange={(e) => updateSettings({ keyboardLayout: e.target.value as 'qwerty' | 'azerty' | 'qwertz' })}
+                  >
+                    <option value="qwerty">QWERTY</option>
+                    <option value="azerty">AZERTY</option>
+                    <option value="qwertz">QWERTZ</option>
+                  </select>
+                </div>
               </div>
             </section>
 
@@ -185,12 +203,12 @@ export const SettingsModal: React.FC = () => {
             </h3>
             
             <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
-              <label className="flex items-center justify-between cursor-pointer">
+              <label className="flex items-center justify-between gap-4 cursor-pointer">
                 <div>
                   <div className="text-white font-medium">Use List View (Screen Reader Friendly)</div>
                   <div className="text-sm text-[var(--text-muted)]">Replaces the 2D pad grid with a linear list structure optimized for screen readers and keyboard navigation.</div>
                 </div>
-                <div className={`w-11 h-6 rounded-full transition-colors relative ${settings.useListView ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
+                <div className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${settings.useListView ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
                   <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${settings.useListView ? 'translate-x-5' : 'translate-x-0'}`} />
                 </div>
                 <input 
@@ -209,13 +227,13 @@ export const SettingsModal: React.FC = () => {
             </h3>
             
             <div className="bg-[var(--bg-surface)] border border-[var(--accent-danger)]/20 rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-4">
                 <div>
                   <div className="text-white font-medium">Reset App</div>
                   <div className="text-sm text-[var(--text-muted)]">Clear all projects, pads, and custom samples. This cannot be undone.</div>
                 </div>
                 <button 
-                  className="px-4 py-2 bg-[var(--accent-danger)]/10 text-[var(--accent-danger)] hover:bg-[var(--accent-danger)] hover:text-white rounded-lg transition-colors font-medium"
+                  className="px-4 py-2 bg-[var(--accent-danger)]/10 text-[var(--accent-danger)] hover:bg-[var(--accent-danger)] hover:text-white rounded-lg transition-colors font-medium shrink-0"
                   onClick={async () => {
                     const confirmed = await showConfirmDialog({
                       title: 'Reset App',
@@ -234,9 +252,8 @@ export const SettingsModal: React.FC = () => {
               </div>
             </div>
           </section>
-          
         </div>
-        </div>
+      </div>
       )}
     </div>
   )

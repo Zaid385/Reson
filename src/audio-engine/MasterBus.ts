@@ -4,17 +4,23 @@ import { linearToDb } from '@utils/math'
 export class MasterBus {
   public readonly volumeNode: Tone.Volume
   public readonly muteNode: Tone.Volume
+  public readonly limiterNode: Tone.Limiter
   public readonly analyser: Tone.Meter
 
   constructor() {
     this.volumeNode = new Tone.Volume(0)
     // Using a separate volume node for mute allows a fast fade without losing the original volume setting
     this.muteNode = new Tone.Volume(0)
+    
+    // Add a Master Output Limiter to prevent clipping (limit at -0.1 dB)
+    this.limiterNode = new Tone.Limiter(-0.1)
+    
     this.analyser = new Tone.Meter({ channels: 2 })
 
-    // Build the master chain
+    // Build the master chain: Volume -> Mute -> Limiter -> Analyser -> Destination
     this.volumeNode.connect(this.muteNode)
-    this.muteNode.connect(this.analyser)
+    this.muteNode.connect(this.limiterNode)
+    this.limiterNode.connect(this.analyser)
     this.analyser.toDestination()
   }
 
@@ -42,6 +48,7 @@ export class MasterBus {
   dispose() {
     this.volumeNode.dispose()
     this.muteNode.dispose()
+    this.limiterNode.dispose()
     this.analyser.dispose()
   }
 }

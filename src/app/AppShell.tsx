@@ -6,6 +6,7 @@ import { ParameterPanel } from '@features/parameter-panel'
 import { FooterBar } from '@features/footer'
 import { useKeyboardController } from '@hooks/useKeyboardController'
 import { usePointerRollController } from '@hooks/usePointerRollController'
+import { useMidiController } from '@hooks/useMidiController'
 import { useAudioEngineBinding } from '@hooks/useAudioEngineBinding'
 import { useAutosave } from '@hooks/useAutosave'
 import { OnboardingOverlay } from '@features/onboarding'
@@ -15,10 +16,12 @@ import { DialogProvider } from '@components/ui/DialogProvider'
 const SampleEditorModal = lazy(() => import('@features/sample-editor').then(m => ({ default: m.SampleEditorModal })))
 const SettingsModal = lazy(() => import('@features/settings').then(m => ({ default: m.SettingsModal })))
 const KeyboardShortcutsModal = lazy(() => import('@features/settings').then(m => ({ default: m.KeyboardShortcutsModal })))
+const ProjectsModal = lazy(() => import('@features/projects/ProjectsModal').then(m => ({ default: m.ProjectsModal })))
 
 export function AppShell() {
   useKeyboardController()
   usePointerRollController()
+  useMidiController()
   useAudioEngineBinding()
   useAutosave()
   
@@ -40,6 +43,7 @@ export function AppShell() {
         {activeModal === 'sampleEditor' && <SampleEditorModal />}
         {activeModal === 'settings' && <SettingsModal />}
         {activeModal === 'shortcuts' && <KeyboardShortcutsModal />}
+        {activeModal === 'projects' && <ProjectsModal />}
       </Suspense>
       <DialogProvider />
       <OnboardingOverlay />

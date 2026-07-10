@@ -70,6 +70,26 @@ export class ProjectRepository {
       }
     })
   }
+  async isProjectEmpty(projectId: string): Promise<boolean> {
+    const banks = await db.banks.where('projectId').equals(projectId).toArray()
+    const bankIds = banks.map(b => b.id)
+    if (bankIds.length === 0) return true
+    
+    const padsWithAssets = await db.pads.where('bankId').anyOf(bankIds).filter(p => p.assetId !== null).count()
+    return padsWithAssets === 0
+  }
+
+  async cleanupEmptyProjects(): Promise<void> {
+    const projects = await db.projects.toArray()
+    for (const project of projects) {
+      if (project.isActive) continue // Don't delete the active project
+      
+      const isEmpty = await this.isProjectEmpty(project.id)
+      if (isEmpty) {
+        await this.deleteProject(project.id)
+      }
+    }
+  }
 }
 
 export const projectRepository = new ProjectRepository()

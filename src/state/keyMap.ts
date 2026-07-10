@@ -12,3 +12,24 @@ export const QwertyKeyMap: Record<string, number> = {
   'KeyZ': 24, 'KeyX': 25, 'KeyC': 26, 'KeyV': 27,
   'KeyB': 28, 'KeyN': 29, 'KeyM': 30, 'Comma': 31
 }
+
+export const KeyboardLabels: Record<string, string[]> = {
+  qwerty: [
+    '1','2','3','4','5','6','7','8',
+    'Q','W','E','R','T','Y','U','I',
+    'A','S','D','F','G','H','J','K',
+    'Z','X','C','V','B','N','M',','
+  ],
+  azerty: [
+    '&','é','"','\'','(','-','è','_',
+    'A','Z','E','R','T','Y','U','I',
+    'Q','S','D','F','G','H','J','K',
+    'W','X','C','V','B','N','M',','
+  ],
+  qwertz: [
+    '1','2','3','4','5','6','7','8',
+    'Q','W','E','R','T','Z','U','I',
+    'A','S','D','F','G','H','J','K',
+    'Y','X','C','V','B','N','M',','
+  ]
+}
