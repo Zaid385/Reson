@@ -1,75 +1,85 @@
-# React + TypeScript + Vite
+# Reson
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A professional, web-based drum machine and sampler built for modern browsers.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- 32-pad performance grid
+- Multi-bank support (4 banks, 128 pads total)
+- Keyboard and touch input with customizable layouts
+- Built-in factory sound kits
+- User sample import
+- Advanced sample editor (trim, pitch, gain, fade in/out, normalize, reverse, loop)
+- Per-pad FX (Filter, Drive, Bitcrusher, Compressor, Delay, Reverb)
+- Pad color customization
+- Responsive layout
+- Local-first workflow
+- IndexedDB persistence and autosave
+- PWA / offline support
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Screenshots
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+![Main Interface](docs/images/main.png)
+![Sample Editor](docs/images/editor.png)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React
+- TypeScript
+- Vite
+- Tone.js
+- WaveSurfer.js
+- Zustand
+- Dexie
+- Tailwind CSS
+- Vitest
+- Playwright
 
+---
+
+## Getting Started
+
+```bash
+git clone https://github.com/Zaid385/Reson.git
+cd Reson
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+To build for production:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run build
 ```
+
+---
+
+## Project Structure
+
+- `src/audio-engine/` - Core Web Audio API and Tone.js integration
+- `src/components/` - Reusable UI components
+- `src/domain/` - Business logic and application services
+- `src/features/` - Feature-specific React components (pad grid, sample editor, etc.)
+- `src/models/` - TypeScript data models and interfaces
+- `src/persistence/` - IndexedDB configuration and repository layers
+- `src/state/` - Zustand global state management
+- `src/styles/` - Global CSS and Tailwind directives
+- `src/utils/` - Shared helper functions
+
+---
+
+## Browser Support
+
+Reson requires a modern browser with full Web Audio API support. Recommended browsers include recent versions of Chrome, Edge, Safari, and Firefox.
+
+---
+
+## License
+
+[Add License Here]
