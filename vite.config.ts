@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav,json}']
       },
       manifest: {
         name: 'Reson',

@@ -1,4 +1,5 @@
-export * from './PadGrid'
+export { PadGrid } from './PadGrid'
+export { PadListView } from './PadListView'
 export * from './Pad'
 export * from './PadWaveformThumbnail'
 export * from './PadBadge'

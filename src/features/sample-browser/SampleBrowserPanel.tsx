@@ -7,9 +7,11 @@ import { assetRepository } from '@persistence/repositories/AssetRepository'
 import { AssetData } from '@types/models'
 import { AudioEngine } from '@audio-engine'
 import { useStore } from '@state/store'
+import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
 
 export const SampleBrowserPanel: React.FC = () => {
   const isSampleBrowserOpen = useStore(state => state.isSampleBrowserOpen)
+  const toggleSampleBrowser = useStore(state => state.toggleSampleBrowser)
   const [activeTab, setActiveTab] = useState<TabType>('built-in')
   const [query, setQuery] = useState('')
   const [manifest, setManifest] = useState<Manifest | null>(null)
@@ -84,11 +86,13 @@ export const SampleBrowserPanel: React.FC = () => {
   const userItems = userAssets.filter(a => a.name.toLowerCase().includes(query.toLowerCase()))
 
   return (
-    <aside className="w-[280px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex flex-col shrink-0 overflow-hidden">
-      <div className="p-4 border-b border-[var(--border-subtle)]">
-        <h2 className="label-caps">Browser</h2>
-      </div>
-      
+    <ResponsiveDrawer 
+      isOpen={isSampleBrowserOpen} 
+      onClose={toggleSampleBrowser} 
+      side="left" 
+      width="w-[280px]" 
+      title="Sample Browser"
+    >
       <SampleBrowserTabs activeTab={activeTab} setTab={setActiveTab} />
       <SampleBrowserSearch query={query} setQuery={setQuery} />
       
@@ -130,6 +134,6 @@ export const SampleBrowserPanel: React.FC = () => {
           </div>
         )}
       </div>
-    </aside>
+    </ResponsiveDrawer>
   )
 }

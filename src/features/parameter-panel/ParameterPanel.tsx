@@ -2,6 +2,7 @@ import React from 'react'
 import { useStore } from '@state/store'
 import { SliderControl, KnobControl } from '@components/controls'
 import { Power, Volume2, MicOff, Settings2, Scissors } from 'lucide-react'
+import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
 
 const COLORS = [
   '#00F0FF', '#C3F400', '#FF007A', '#FFB020', 
@@ -18,21 +19,20 @@ export function ParameterPanel() {
 
   if (!isParamPanelOpen) {
     return (
-      <aside className="w-12 bg-[var(--bg-surface)] border-l border-[var(--border-subtle)] flex flex-col items-center py-4 shrink-0 cursor-pointer hover:bg-[var(--bg-surface-raised)] transition-colors" onClick={toggleParamPanel}>
+      <aside className="hidden lg:flex w-12 bg-[var(--bg-surface)] border-l border-[var(--border-subtle)] flex-col items-center py-4 shrink-0 cursor-pointer hover:bg-[var(--bg-surface-raised)] transition-colors" onClick={toggleParamPanel}>
         <Settings2 className="w-5 h-5 text-[var(--text-muted)]" />
       </aside>
     )
   }
 
   return (
-    <aside className="w-[320px] bg-[var(--bg-surface)] border-l border-[var(--border-subtle)] flex flex-col shrink-0 overflow-y-auto">
-      <div className="p-4 border-b border-[var(--border-subtle)] flex justify-between items-center bg-[var(--bg-elevated)] sticky top-0 z-10">
-        <h2 className="label-caps">Parameter Panel</h2>
-        <button onClick={toggleParamPanel} className="text-[var(--text-muted)] hover:text-white transition-colors">
-          <Settings2 className="w-4 h-4" />
-        </button>
-      </div>
-
+    <ResponsiveDrawer 
+      isOpen={isParamPanelOpen} 
+      onClose={toggleParamPanel} 
+      side="right" 
+      width="w-[320px]" 
+      title="Parameters"
+    >
       {!padData ? (
         <div className="p-8 text-center text-sm text-[var(--text-muted)] flex-1 flex items-center justify-center">
           Select a pad to edit parameters
@@ -164,6 +164,6 @@ export function ParameterPanel() {
 
         </div>
       )}
-    </aside>
+    </ResponsiveDrawer>
   )
 }

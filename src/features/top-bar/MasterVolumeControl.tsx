@@ -42,12 +42,19 @@ export function MasterVolumeControl() {
 
       <div className="flex items-center gap-2">
         <div className="relative w-24 h-6 flex items-center group">
-          <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
+          <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full border border-[var(--border-subtle)] pointer-events-none">
             <div 
-              className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] group-hover:bg-[var(--accent-cyan-hover)] transition-colors"
+              className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] group-hover:bg-[var(--accent-cyan-hover)] transition-colors rounded-l-full"
               style={{ width: `${masterVolume * 100}%` }}
             />
           </div>
+          
+          {/* Slider Thumb */}
+          <div 
+            className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_5px_rgba(0,0,0,0.5)] border border-[var(--border-subtle)] group-hover:scale-125 transition-transform pointer-events-none"
+            style={{ left: `calc(${masterVolume * 100}% - 6px)` }}
+          />
+
           <input
             type="range"
             min={0}

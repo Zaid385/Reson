@@ -55,7 +55,7 @@ export const PadGrid: React.FC = () => {
   return (
     <>
       <div 
-        className={`grid grid-cols-8 gap-2 w-full max-w-[1400px] mx-auto p-8 flex-1 content-center transition-colors ${isDragOver ? 'bg-[var(--bg-surface-raised)] rounded-2xl' : ''}`}
+        className={`grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2 w-full max-w-[1400px] mx-auto p-2 md:p-8 flex-1 content-center transition-colors ${isDragOver ? 'bg-[var(--bg-surface-raised)] rounded-2xl' : ''} touch-none`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}

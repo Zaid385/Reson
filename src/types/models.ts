@@ -59,6 +59,7 @@ export interface SettingsData {
   masterVolume: number
   masterMute: boolean
   confirmBeforeReplace: boolean
+  useListView: boolean
   keyboardMappingMode: 'physical' | 'printed'
   themeDensity: 'compact' | 'comfortable'
   hasSeenOnboarding: boolean

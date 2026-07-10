@@ -40,6 +40,7 @@ export class ProjectBootstrapService {
       masterVolume: 0.8,
       masterMute: false,
       confirmBeforeReplace: true,
+      useListView: false,
       keyboardMappingMode: 'physical',
       themeDensity: 'comfortable',
       hasSeenOnboarding: false

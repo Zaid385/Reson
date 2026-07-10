@@ -20,20 +20,21 @@ export const KnobControl: React.FC<KnobControlProps> = ({
   const [startValue, setStartValue] = useState(0)
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    e.preventDefault()
+    // e.preventDefault()
     setIsDragging(true)
     setStartY(e.clientY)
     setStartValue(value)
-    containerRef.current?.requestPointerLock?.()
   }
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
     if (!isDragging) return
-    const deltaY = e.movementY || (e.clientY - startY)
     
-    // Sensibility multiplier
+    // Calculate total vertical distance dragged
+    const deltaY = startY - e.clientY
+    
+    // 150px drag = full range
     const range = max - min
-    const deltaVal = -(deltaY * (range / 200)) // 200px drag = full range
+    const deltaVal = (deltaY / 150) * range
     
     let newVal = startValue + deltaVal
     if (step) {
@@ -46,7 +47,6 @@ export const KnobControl: React.FC<KnobControlProps> = ({
 
   const handlePointerUp = useCallback(() => {
     setIsDragging(false)
-    document.exitPointerLock?.()
   }, [])
 
   useEffect(() => {

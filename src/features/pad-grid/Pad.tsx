@@ -100,9 +100,18 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
 
   return (
     <div 
-      className={`relative w-full aspect-square rounded-lg flex flex-col justify-between p-2 cursor-pointer transition-all select-none ${borderClass} ${scaleClass} ${ringClass} ${dragClass}`}
+      className={`relative w-full aspect-square rounded-lg flex flex-col justify-between p-2 cursor-pointer transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-cyan)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${borderClass} ${scaleClass} ${ringClass} ${dragClass}`}
       style={dynamicStyles}
       data-pad-id={padId}
+      role="button"
+      tabIndex={0}
+      aria-label={`Pad ${keyLabel} - ${!isEmpty ? padData.displayName : 'Empty'}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          selectPad(padId)
+        }
+      }}
       onClick={() => selectPad(padId)}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
