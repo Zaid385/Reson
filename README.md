@@ -21,13 +21,6 @@ A professional, web-based drum machine and sampler built for modern browsers.
 
 ---
 
-## Screenshots
-
-![Main Interface](docs/images/main.png)
-![Sample Editor](docs/images/editor.png)
-
----
-
 ## Tech Stack
 
 - React
@@ -77,9 +70,3 @@ npm run build
 ## Browser Support
 
 Reson requires a modern browser with full Web Audio API support. Recommended browsers include recent versions of Chrome, Edge, Safari, and Firefox.
-
----
-
-## License
-
-[Add License Here]
