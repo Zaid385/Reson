@@ -157,7 +157,7 @@ export const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   }, [playheadPosition])
 
   return (
-    <div className="w-full h-full relative" ref={containerRef}>
+    <div className="w-full h-full relative touch-none" ref={containerRef}>
       {/* Flags Overlay */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Start Flag */}

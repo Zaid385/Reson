@@ -1,5 +1,5 @@
 import React from 'react'
-import { Play, Square } from 'lucide-react'
+import { Play, Square, Trash2 } from 'lucide-react'
 
 interface Props {
   id: string
@@ -7,9 +7,10 @@ interface Props {
   url?: string // used for fetching if built-in
   isPlaying?: boolean
   onPreviewToggle: () => void
+  onDelete?: () => void
 }
 
-export const SampleListItem: React.FC<Props> = ({ id, name, url, isPlaying, onPreviewToggle }) => {
+export const SampleListItem: React.FC<Props> = ({ id, name, url, isPlaying, onPreviewToggle, onDelete }) => {
   const handleDragStart = async (e: React.DragEvent) => {
     // For drag and drop from the browser to the pad
     e.dataTransfer.setData('application/reson-sample-id', id)
@@ -36,6 +37,18 @@ export const SampleListItem: React.FC<Props> = ({ id, name, url, isPlaying, onPr
         {/* Layout preparation for future waveform thumbnail */}
         <div className="h-3 w-full mt-1 rounded-[1px] opacity-20 bg-gradient-to-r from-[var(--border-subtle)] to-transparent pointer-events-none hidden" />
       </div>
+      {onDelete && (
+        <button
+          className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete()
+          }}
+          title="Delete sample"
+        >
+          <Trash2 size={14} />
+        </button>
+      )}
     </div>
   )
 }

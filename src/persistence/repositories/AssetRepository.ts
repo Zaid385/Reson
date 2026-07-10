@@ -41,12 +41,12 @@ export class AssetRepository {
     const asset = await db.assets.get(assetId)
     if (asset) {
       const newCount = Math.max(0, asset.refCount - 1)
-      if (newCount === 0 && asset.sourceType === 'user-upload') {
-        await db.assets.delete(assetId)
-      } else {
-        await db.assets.update(assetId, { refCount: newCount })
-      }
+      await db.assets.update(assetId, { refCount: newCount })
     }
+  }
+
+  async deleteAsset(assetId: string): Promise<void> {
+    await db.assets.delete(assetId)
   }
 
   async getStorageEstimate(): Promise<{ usage: number; quota: number }> {

@@ -20,7 +20,7 @@ export const SliderControl: React.FC<SliderControlProps> = ({
   const helpProps = useContextualHelp(helpText || '')
 
   return (
-    <div className="flex flex-col gap-1 w-full" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>
+    <div className="flex flex-col gap-1 w-full select-none touch-none" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>
       <div className="flex justify-between items-end mb-1">
         <label className="text-[10px] font-semibold text-[var(--text-secondary)] tracking-wider capitalize">
           {label}

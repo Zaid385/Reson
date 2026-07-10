@@ -3,6 +3,7 @@ import { extractPeaks } from './peakExtraction'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
 import { useStore } from '@state/store'
 import { AudioEngine } from '@audio-engine'
+import { toast } from '@state/toastStore'
 
 export class SampleAssignmentService {
   private tempContext = new AudioContext()
@@ -10,12 +11,15 @@ export class SampleAssignmentService {
   async assignFileToPad(file: File, padId: string): Promise<void> {
     const val = validateSampleFile(file)
     if (!val.valid) {
-      // Dispatch error toast (to be implemented)
+      toast.error(val.error || 'Invalid file format')
       console.error(val.error)
       return
     }
 
+    const store = useStore.getState()
     try {
+      store.setProcessing(true, 'Processing audio...')
+      
       // Read array buffer
       const arrayBuffer = await file.arrayBuffer()
       
@@ -44,7 +48,6 @@ export class SampleAssignmentService {
       AudioEngine.registerBuffer(assetId, audioBuffer)
 
       // Get current pad to see if we need to deref old asset
-      const store = useStore.getState()
       const pad = store.pads[padId]
       if (pad?.assetId) {
         await assetRepository.decrementRefCount(pad.assetId)
@@ -63,15 +66,19 @@ export class SampleAssignmentService {
       })
 
     } catch (e) {
-      console.error('Failed to assign sample', e)
+      console.error('Failed to assign file to pad', e)
+      toast.error('Failed to process audio file')
+    } finally {
+      store.setProcessing(false)
     }
   }
 
   async assignBuiltInSampleToPad(sampleId: string, sampleName: string, _sampleUrl: string, padId: string): Promise<void> {
+    const store = useStore.getState()
     try {
+      store.setProcessing(true, 'Assigning sample...')
       const assetId = sampleId
       
-      const store = useStore.getState()
       const pad = store.pads[padId]
       if (pad?.assetId) {
         await assetRepository.decrementRefCount(pad.assetId)
@@ -87,15 +94,18 @@ export class SampleAssignmentService {
 
     } catch (e) {
       console.error('Failed to assign built-in sample', e)
+    } finally {
+      store.setProcessing(false)
     }
   }
 
   async assignExistingAssetToPad(assetId: string, padId: string): Promise<void> {
+    const store = useStore.getState()
     try {
+      store.setProcessing(true, 'Loading asset...')
       const asset = await assetRepository.getAsset(assetId)
       if (!asset) return
 
-      const store = useStore.getState()
       const pad = store.pads[padId]
       if (pad?.assetId) {
         await assetRepository.decrementRefCount(pad.assetId)
@@ -112,6 +122,8 @@ export class SampleAssignmentService {
       })
     } catch (e) {
       console.error('Failed to assign existing asset', e)
+    } finally {
+      store.setProcessing(false)
     }
   }
 
@@ -119,9 +131,30 @@ export class SampleAssignmentService {
     const store = useStore.getState()
     const pad = store.pads[padId]
     if (pad?.assetId) {
+      AudioEngine.stopPad(padId)
       await assetRepository.decrementRefCount(pad.assetId)
-      store.updatePad(padId, { assetId: null, displayName: '' })
+      store.updatePad(padId, { assetId: null, displayName: `Pad ${padId.split(':')[1]}` })
+      toast.success('Sample removed from pad')
     }
+  }
+
+  async deleteUserSample(assetId: string): Promise<void> {
+    const store = useStore.getState()
+    
+    // Remove from all pads
+    Object.keys(store.pads).forEach(padId => {
+      if (store.pads[padId].assetId === assetId) {
+        AudioEngine.stopPad(padId)
+        store.updatePad(padId, { assetId: null, displayName: `Pad ${padId.split(':')[1]}` })
+      }
+    })
+    
+    // Stop preview if it's currently playing
+    AudioEngine.previewStop()
+    
+    // Delete from DB directly
+    await assetRepository.deleteAsset(assetId)
+    toast.success('Sample deleted completely')
   }
 }
 

@@ -56,14 +56,24 @@ export const SampleEditorModal: React.FC = () => {
     return () => unsub()
   }, [])
 
-  const audioUrl = React.useMemo(() => {
-    if (!asset) return undefined
-    if (asset.sourceType === 'built-in') {
-      return `/samples/${asset.id}.wav`
-    } else if (asset.audioData) {
-      return URL.createObjectURL(asset.audioData)
+  const [audioUrl, setAudioUrl] = useState<string | undefined>()
+
+  useEffect(() => {
+    if (!asset) {
+      setAudioUrl(undefined)
+      return
     }
-    return undefined
+    if (asset.sourceType === 'built-in') {
+      setAudioUrl(`/samples/${asset.id}.wav`)
+      return
+    } else if (asset.audioData) {
+      const url = URL.createObjectURL(asset.audioData)
+      setAudioUrl(url)
+      return () => {
+        URL.revokeObjectURL(url)
+      }
+    }
+    setAudioUrl(undefined)
   }, [asset])
 
   if (!isOpen) return null

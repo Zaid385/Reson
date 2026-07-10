@@ -4,6 +4,7 @@ import { SampleBrowserTabs, TabType } from './SampleBrowserTabs'
 import { SampleListItem } from './SampleListItem'
 import { builtInSampleManifest, Manifest } from '@persistence/builtInSampleManifest'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
+import { showConfirmDialog } from '@utils/dialog'
 import { AssetData } from '@models/models'
 import { AudioEngine } from '@audio-engine'
 import { useStore } from '@state/store'
@@ -11,12 +12,14 @@ import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
 import { liveQuery } from 'dexie'
 import { db } from '@persistence/db'
 import { engineEvents } from '@audio-engine/engineEvents'
+import { sampleAssignmentService } from '@domain/sample-assignment/SampleAssignmentService'
 
 import { motion, AnimatePresence } from 'framer-motion'
 
 export const SampleBrowserPanel: React.FC = () => {
   const isSampleBrowserOpen = useStore(state => state.isSampleBrowserOpen)
   const toggleSampleBrowser = useStore(state => state.toggleSampleBrowser)
+  const setProcessing = useStore(state => state.setProcessing)
   const [activeTab, setActiveTab] = useState<TabType>('built-in')
   const [query, setQuery] = useState('')
   const [manifest, setManifest] = useState<Manifest | null>(null)
@@ -74,6 +77,7 @@ export const SampleBrowserPanel: React.FC = () => {
       }
     } else if (activeTab === 'user') {
       try {
+        setProcessing(true, 'Loading sample...')
         // If it's not registered in the engine, hydrate it on-demand
         // We'll peek if it's there. Actually we can't easily peek, 
         // but let's just attempt to load it from DB and register if we know we need to.
@@ -90,7 +94,22 @@ export const SampleBrowserPanel: React.FC = () => {
         setPreviewingId(sampleId)
       } catch (e) {
         console.error('User sample preview failed', e)
+      } finally {
+        setProcessing(false)
       }
+    }
+  }
+
+  const handleDeleteSample = async (id: string) => {
+    const confirmed = await showConfirmDialog({
+      title: 'Delete Sample',
+      message: 'Are you sure you want to delete this sample? It will be permanently removed from your project and all pads.',
+      confirmText: 'Delete',
+      isDanger: true
+    })
+    
+    if (confirmed) {
+      await sampleAssignmentService.deleteUserSample(id)
     }
   }
 
@@ -164,6 +183,7 @@ export const SampleBrowserPanel: React.FC = () => {
                   name={asset.name}
                   isPlaying={previewingId === asset.id}
                   onPreviewToggle={() => handlePreviewToggle(asset.id)}
+                  onDelete={() => handleDeleteSample(asset.id)}
                 />
               ))}
               {userItems.length === 0 && (

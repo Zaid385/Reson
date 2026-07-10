@@ -91,7 +91,7 @@ export const KnobControl: React.FC<KnobControlProps> = ({
 
 
   return (
-    <div className="flex flex-col items-center justify-center gap-1 select-none group" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>
+    <div className="flex flex-col items-center justify-center gap-1 select-none touch-none group" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>
       <label className="text-[11px] font-semibold text-[var(--text-secondary)] tracking-widest capitalize mb-1 opacity-80 group-hover:opacity-100 transition-opacity">
         {label}
       </label>

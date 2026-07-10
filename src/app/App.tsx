@@ -27,8 +27,6 @@ export function App() {
     if (!hasStarted) return
     
     async function init() {
-      await AudioEngine.initialize()
-      
       useStatusStore.getState().setAppStatus('Generating Factory Kit...')
       const generated = await BuiltInSampleGenerator.generateAll()
       builtInSampleManifest.setGeneratedSamples(generated)
@@ -71,7 +69,10 @@ export function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 className="px-8 py-3 bg-[var(--accent-cyan)] text-black rounded-full font-bold tracking-wider capitalize text-sm hover:bg-[var(--accent-cyan-hover)] transition-colors shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_25px_rgba(0,240,255,0.5)]"
-                onClick={() => setHasStarted(true)}
+                onClick={async () => {
+                  await AudioEngine.initialize()
+                  setHasStarted(true)
+                }}
               >
                 Dive in
               </motion.button>

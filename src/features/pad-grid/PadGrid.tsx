@@ -6,7 +6,6 @@ import { PadContextMenu } from './PadContextMenu'
 
 export const PadGrid: React.FC = () => {
   const activeBankId = useStore(state => state.activeBankId)
-  const pads = useStore(state => state.pads)
   const [isDragOver, setIsDragOver] = useState(false)
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, padId: string } | null>(null)
 
@@ -38,6 +37,7 @@ export const PadGrid: React.FC = () => {
       
       // Find empty pads in current bank
       const emptySlots: number[] = []
+      const pads = useStore.getState().pads
       for (let i = 0; i < 32; i++) {
         if (!pads[`${activeBankId}:${i}`]?.assetId) {
           emptySlots.push(i)

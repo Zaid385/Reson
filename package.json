@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "serve -s dist -l ${PORT:-3000}"
   },
   "dependencies": {
     "dexie": "^4.4.4",
@@ -19,6 +20,7 @@
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "serve": "^14.2.6",
     "tone": "^15.1.22",
     "uuid": "^14.0.1",
     "wavesurfer.js": "^7.12.10",

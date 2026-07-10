@@ -13,6 +13,8 @@ import { useAutosave } from '@hooks/useAutosave'
 import { OnboardingOverlay } from '@features/onboarding'
 import { useStore } from '@state/store'
 import { DialogProvider } from '@components/ui/DialogProvider'
+import { ToastContainer } from '@components/ui/ToastContainer'
+import { GlobalLoader } from '@components/ui/GlobalLoader'
 
 const SampleEditorModal = lazy(() => import('@features/sample-editor').then(m => ({ default: m.SampleEditorModal })))
 const SettingsModal = lazy(() => import('@features/settings').then(m => ({ default: m.SettingsModal })))
@@ -48,6 +50,8 @@ export function AppShell() {
       </Suspense>
       <DialogProvider />
       <OnboardingOverlay />
+      <ToastContainer />
+      <GlobalLoader />
     </div>
   )
 }
