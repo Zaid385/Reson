@@ -68,13 +68,13 @@ export const BankSelector: React.FC = () => {
 
   return (
     <>
-      <div className="flex bg-bg-base p-1 rounded-md gap-1 ml-6">
+      <div className="flex bg-[var(--bg-base)] p-1 rounded-lg gap-1 ml-6 border border-[var(--border-subtle)]/30 shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
         {banks.map((bank, i) => (
           <div key={bank.id} className="relative flex items-center">
             {editingBankId === bank.id ? (
               <input
                 ref={inputRef}
-                className="px-2 py-1 text-sm font-medium rounded-sm bg-bg-surface border border-[var(--accent-cyan)] outline-none text-white w-20"
+                className="px-2 py-1 text-sm font-medium rounded-md bg-[var(--bg-surface)] border border-[var(--accent-cyan)] outline-none text-[var(--text-primary)] w-20"
                 value={editName}
                 onChange={e => setEditName(e.target.value)}
                 onBlur={submitEdit}
@@ -82,10 +82,10 @@ export const BankSelector: React.FC = () => {
               />
             ) : (
               <button
-                className={`px-3 py-1 text-sm font-medium rounded-sm transition-colors cursor-pointer select-none ${
+                className={`px-4 py-1 text-sm font-medium rounded-md transition-all duration-200 cursor-pointer select-none ${
                   activeBankId === bank.id
-                    ? 'bg-bg-elevated text-[var(--accent-cyan)] shadow-sm'
-                    : 'text-text-muted hover:text-white hover:bg-bg-surface'
+                    ? 'bg-[var(--bg-surface-raised)] text-[var(--accent-cyan)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.4),0_1px_0_rgba(255,255,255,0.05)] border border-[var(--border-subtle)]/50'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-transparent'
                 }`}
                 onClick={() => setActiveBank(bank.id)}
                 onDoubleClick={() => handleDoubleClick(bank.id, bank.name)}

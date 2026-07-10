@@ -28,7 +28,7 @@ export const NumericParamInput: React.FC<Props> = ({ label, value, onChange, min
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">
+      <label className="text-[10px] capitalize font-bold text-[var(--text-muted)] tracking-wider">
         {label}
       </label>
       <div className="flex items-center w-[120px] bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-md overflow-hidden focus-within:border-[var(--accent-cyan)] transition-colors">

@@ -7,6 +7,7 @@ export const ReverbModule: React.FC<EffectModuleProps> = ({ padData, onChange })
   return (
     <FXModule 
       title="Reverb" 
+      helpText="Adds ambience by simulating acoustic space."
       enabled={padData.reverbEnabled}
       onToggle={(enabled) => onChange({ reverbEnabled: enabled })}
       onReset={() => onChange({ reverbEnabled: false, reverbSize: 0.7, reverbDecay: 3, reverbWet: 0.5, reverbDry: 1 })}

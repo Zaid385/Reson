@@ -10,7 +10,7 @@ interface FXSelectProps<T extends string> {
 export function FXSelect<T extends string>({ label, value, options, onChange }: FXSelectProps<T>) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest uppercase mb-1">
+      <label className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest capitalize mb-1">
         {label}
       </label>
       <select 

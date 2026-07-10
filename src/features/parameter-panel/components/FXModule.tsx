@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FXHeader } from './FXHeader'
 import { FXToggle } from './FXToggle'
 
+import { useContextualHelp } from '@hooks/useContextualHelp'
+
 interface FXModuleProps {
   title: string
   defaultExpanded?: boolean
@@ -10,6 +12,7 @@ interface FXModuleProps {
   onToggle?: (enabled: boolean) => void
   onReset?: () => void
   hasToggle?: boolean
+  helpText?: string
   children: React.ReactNode
 }
 
@@ -20,12 +23,14 @@ export const FXModule: React.FC<FXModuleProps> = ({
   onToggle,
   onReset,
   hasToggle = true,
+  helpText,
   children 
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
+  const helpProps = useContextualHelp(helpText || '')
 
   return (
-    <div className="flex flex-col border-b border-[var(--border-subtle)] bg-[var(--bg-base)]">
+    <div className="flex flex-col border-b border-[var(--border-subtle)] bg-[var(--bg-base)]" {...(helpText ? helpProps : {})}>
       <FXHeader 
         title={title} 
         isExpanded={isExpanded} 

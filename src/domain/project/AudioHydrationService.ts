@@ -21,21 +21,13 @@ export class AudioHydrationService {
 
         if (asset && asset.audioData) {
           // User upload or edited built-in that got cached
-          arrayBuffer = await asset.audioData.arrayBuffer()
+          let arrayBuffer = await asset.audioData.arrayBuffer()
+          const audioBuffer = await this.tempContext.decodeAudioData(arrayBuffer.slice(0))
+          AudioEngine.registerBuffer(assetId, audioBuffer)
         } else {
-          // It's likely a built-in sample reference without a blob
-          const url = await builtInSampleManifest.getSampleUrl(assetId)
-          if (!url) {
-            console.warn(`Could not resolve asset data or URL for ${assetId}`)
-            return
-          }
-          const response = await fetch(`${url}?v=1`)
-          if (!response.ok) throw new Error('Failed to fetch built-in sample')
-          arrayBuffer = await response.arrayBuffer()
+          // It's a built-in sample. It is already procedurally generated and registered in AudioEngine during startup.
+          return
         }
-
-        const audioBuffer = await this.tempContext.decodeAudioData(arrayBuffer.slice(0))
-        AudioEngine.registerBuffer(assetId, audioBuffer)
       } catch (e) {
         console.error(`Failed to hydrate asset ${assetId}`, e)
       }

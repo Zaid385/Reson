@@ -1,9 +1,25 @@
 import React, { useRef, useState } from 'react'
 import { useStore } from '@state/store'
-import { X, Save, Trash2, SlidersHorizontal, Keyboard, Download, Upload } from 'lucide-react'
+import { X, Save, Trash2, SlidersHorizontal, Keyboard, Download, Upload, ChevronDown } from 'lucide-react'
 import { projectIoService } from '@domain/project/ProjectIoService'
 import { showConfirmDialog, showAlertDialog } from '@utils/dialog'
 import { db } from '@persistence/db'
+
+import { motion, AnimatePresence } from 'framer-motion'
+
+const GithubIcon = ({ className }: { className?: string }) => (
+  <svg 
+    className={className} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"></path>
+  </svg>
+)
 
 export const SettingsModal: React.FC = () => {
   const isOpen = useStore(state => state.activeModal === 'settings')
@@ -15,8 +31,6 @@ export const SettingsModal: React.FC = () => {
 
   const [exportPromptOpen, setExportPromptOpen] = useState(false)
   const [exportName, setExportName] = useState('')
-
-  if (!isOpen || !settings) return null
 
   const handleExportClick = () => {
     const defaultName = project ? `${project.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_reson_kit` : 'reson_kit'
@@ -59,9 +73,24 @@ export const SettingsModal: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      {exportPromptOpen ? (
-        <div className="w-full max-w-sm bg-[var(--settings-modal-bg)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col p-6 space-y-4">
+    <AnimatePresence>
+      {isOpen && settings && (
+        <motion.div 
+          key="settings-modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        >
+          {exportPromptOpen ? (
+            <motion.div 
+              key="export-prompt"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-sm bg-[var(--settings-modal-bg)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col p-6 space-y-4"
+            >
           <h3 className="text-lg font-bold text-[var(--text-primary)]">Export Project</h3>
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Project Name</label>
@@ -91,9 +120,14 @@ export const SettingsModal: React.FC = () => {
               Export
             </button>
           </div>
-        </div>
+        </motion.div>
       ) : (
-        <div 
+        <motion.div 
+          key="settings-content"
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           className="w-full max-w-2xl bg-[var(--settings-modal-bg)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col max-h-[90vh]"
           role="dialog"
           aria-modal="true"
@@ -116,7 +150,7 @@ export const SettingsModal: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-6 space-y-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             
             <section className="space-y-4">
-              <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Project Management</h3>
+              <h3 className="text-sm font-semibold text-[var(--text-secondary)] capitalize tracking-wider">Project Management</h3>
               <div className="bg-[var(--settings-card-bg)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
@@ -156,7 +190,7 @@ export const SettingsModal: React.FC = () => {
             </section>
 
             <section className="space-y-4">
-              <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-[var(--text-secondary)] capitalize tracking-wider flex items-center gap-2">
                 <Save className="w-4 h-4" /> Workflow
               </h3>
               
@@ -184,21 +218,24 @@ export const SettingsModal: React.FC = () => {
                     <div className="text-[var(--text-primary)] font-medium">Keyboard Layout</div>
                     <div className="text-sm text-[var(--text-muted)]">Choose the layout that matches your physical keyboard to update pad labels.</div>
                   </div>
-                  <select 
-                    className="bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent-cyan)] transition-colors shrink-0"
-                    value={settings.keyboardLayout || 'qwerty'}
-                    onChange={(e) => updateSettings({ keyboardLayout: e.target.value as 'qwerty' | 'azerty' | 'qwertz' })}
-                  >
-                    <option value="qwerty">QWERTY</option>
-                    <option value="azerty">AZERTY</option>
-                    <option value="qwertz">QWERTZ</option>
-                  </select>
+                  <div className="relative shrink-0">
+                    <select 
+                      className="appearance-none bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg pl-4 pr-10 py-2 text-sm focus:outline-none focus:border-[var(--accent-cyan)] transition-colors cursor-pointer w-full"
+                      value={settings.keyboardLayout || 'qwerty'}
+                      onChange={(e) => updateSettings({ keyboardLayout: e.target.value as 'qwerty' | 'azerty' | 'qwertz' })}
+                    >
+                      <option value="qwerty">QWERTY</option>
+                      <option value="azerty">AZERTY</option>
+                      <option value="qwertz">QWERTZ</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" />
+                  </div>
                 </div>
               </div>
             </section>
 
           <section className="space-y-4">
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-[var(--text-secondary)] capitalize tracking-wider flex items-center gap-2">
               <Keyboard className="w-4 h-4" /> Accessibility
             </h3>
             
@@ -222,7 +259,30 @@ export const SettingsModal: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h3 className="text-sm font-semibold text-[var(--accent-danger)] uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-[var(--text-secondary)] capitalize tracking-wider flex items-center gap-2">
+              <GithubIcon className="w-4 h-4" /> About Developer
+            </h3>
+            
+            <div className="bg-[var(--settings-card-bg)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-[var(--text-primary)] font-medium text-lg">Developed by Zaid</div>
+                  <div className="text-sm text-[var(--text-muted)]">Creator and owner of this application.</div>
+                </div>
+                <a 
+                  href="https://github.com/Zaid385" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg transition-colors shrink-0 font-medium"
+                >
+                  <GithubIcon className="w-4 h-4" /> GitHub Profile
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h3 className="text-sm font-semibold text-[var(--accent-danger)] capitalize tracking-wider flex items-center gap-2">
               <Trash2 className="w-4 h-4" /> Danger Zone
             </h3>
             
@@ -252,9 +312,11 @@ export const SettingsModal: React.FC = () => {
               </div>
             </div>
           </section>
-        </div>
-      </div>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   )
 }

@@ -6,6 +6,7 @@ import { EditorTransportControls } from './EditorTransportControls'
 import { NumericParamInput } from './NumericParamInput'
 import { useAsset } from '@hooks/useAsset'
 import { AudioEngine } from '@audio-engine'
+import { engineEvents } from '@audio-engine/engineEvents'
 import { showConfirmDialog } from '@utils/dialog'
 
 export const SampleEditorModal: React.FC = () => {
@@ -46,6 +47,13 @@ export const SampleEditorModal: React.FC = () => {
       setIsPlaying(false)
     }
   }, [isOpen, padData])
+
+  useEffect(() => {
+    const unsub = engineEvents.on('preview:ended', () => {
+      setIsPlaying(false)
+    })
+    return () => unsub()
+  }, [])
 
   const audioUrl = React.useMemo(() => {
     if (!asset) return undefined
@@ -195,7 +203,7 @@ export const SampleEditorModal: React.FC = () => {
             />
 
             <div className="flex items-center gap-4">
-              <button onClick={handleNormalize} className="px-4 py-2 text-xs font-semibold uppercase tracking-wider bg-[var(--bg-elevated)] hover:bg-[var(--bg-surface-raised)] rounded-md border border-[var(--border-subtle)] transition-colors">
+              <button onClick={handleNormalize} className="px-4 py-2 text-xs font-semibold capitalize tracking-wider bg-[var(--bg-elevated)] hover:bg-[var(--bg-surface-raised)] rounded-md border border-[var(--border-subtle)] transition-colors">
                 Normalize
               </button>
             </div>

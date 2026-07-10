@@ -7,6 +7,8 @@ import { ProjectData } from '@types/models'
 import { showConfirmDialog, showPromptDialog } from '@utils/dialog'
 import { db } from '@persistence/db'
 
+import { motion, AnimatePresence } from 'framer-motion'
+
 export const ProjectsModal: React.FC = () => {
   const isOpen = useStore(state => state.activeModal === 'projects')
   const closeModal = useStore(state => state.closeModal)
@@ -35,8 +37,6 @@ export const ProjectsModal: React.FC = () => {
       editInputRef.current.select()
     }
   }, [editingId])
-
-  if (!isOpen) return null
 
   const handleNewProject = async () => {
     const name = await showPromptDialog({
@@ -74,7 +74,6 @@ export const ProjectsModal: React.FC = () => {
     
     if (confirmed) {
       if (projectId === activeProject?.id) {
-        // If we deleted the active project, we need to create a new default one
         await projectRepository.deleteProject(projectId)
         const newProject = await projectBootstrapService.createAndSaveDefaultProject()
         await projectRepository.setActiveProject(newProject.id)
@@ -99,7 +98,6 @@ export const ProjectsModal: React.FC = () => {
         updatedAt: Date.now() 
       })
       if (editingId === activeProject?.id) {
-        // Update active project in store
         const updated = await projectRepository.getActiveProject()
         if (updated) {
           useStore.getState().setActiveProject(updated)
@@ -116,14 +114,28 @@ export const ProjectsModal: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-      <div 
-        className="w-full max-w-2xl h-[70vh] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col overflow-hidden"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="projects-title"
-      >
-        <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          key="projects-modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4"
+        >
+          <motion.div 
+            key="projects-modal-content"
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            className="w-full max-w-2xl h-[70vh] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="projects-title"
+          >
+            <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
           <h2 id="projects-title" className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <FolderOpen className="w-5 h-5 text-[var(--accent-cyan)]" />
             Project Manager
@@ -177,7 +189,7 @@ export const ProjectsModal: React.FC = () => {
                           {project.name}
                         </span>
                         {isActive && (
-                          <span className="text-[10px] uppercase tracking-wider bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] capitalize tracking-wider bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] px-2 py-0.5 rounded-full">
                             Active
                           </span>
                         )}
@@ -218,7 +230,9 @@ export const ProjectsModal: React.FC = () => {
             })}
           </div>
         </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

@@ -5,6 +5,7 @@ import { PadBadge } from './PadBadge'
 import { useAsset } from '@hooks/useAsset'
 import { sampleAssignmentService } from '@domain/sample-assignment/SampleAssignmentService'
 import { showConfirmDialog } from '@utils/dialog'
+import { useContextualHelp } from '@hooks/useContextualHelp'
 
 interface PadProps {
   bankId: string
@@ -33,18 +34,29 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const isEmpty = !padData.assetId
   const categoryColor = padData.color || '#00F0FF'
 
-  const borderClass = isEmpty ? 'border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-raised)]' : 'border-2'
-  const scaleClass = isTriggered ? 'scale-[0.95]' : 'scale-100 shadow-[0_4px_12px_rgba(0,0,0,0.5)]'
-  const ringClass = isSelected ? 'ring-2 ring-[var(--accent-cyan)] ring-offset-2 ring-offset-[var(--bg-base)]' : ''
-  const dragClass = isDragOver ? 'ring-4 ring-[var(--accent-cyan)] opacity-80' : ''
+  const borderClass = isEmpty 
+    ? 'border border-dashed border-[var(--border-subtle)]/50 bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-raised)] hover:border-[var(--border-subtle)]' 
+    : 'border'
+  
+  const scaleClass = isTriggered 
+    ? 'scale-[0.98]' 
+    : 'scale-100 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.5)]'
+  
+  const ringClass = isSelected 
+    ? 'ring-2 ring-[var(--accent-cyan)] ring-offset-4 ring-offset-[var(--bg-base)]' 
+    : ''
+  
+  const dragClass = isDragOver ? 'ring-2 ring-[var(--accent-cyan)] opacity-80 scale-[1.02]' : ''
 
   const dynamicStyles: React.CSSProperties = {
-    borderColor: !isEmpty ? categoryColor : undefined,
+    borderColor: !isEmpty ? (isTriggered ? categoryColor : `${categoryColor}60`) : undefined,
     backgroundColor: !isEmpty 
-      ? (isTriggered ? categoryColor : `${categoryColor}1A`) 
+      ? (isTriggered ? categoryColor : `${categoryColor}15`) 
       : undefined,
-    boxShadow: isTriggered && !isEmpty ? `inset 0 4px 8px rgba(0,0,0,0.4), 0 0 16px ${categoryColor}` : undefined,
-    transitionDuration: isTriggered ? '0ms' : '150ms'
+    boxShadow: isTriggered && !isEmpty 
+      ? `inset 0 2px 6px rgba(0,0,0,0.4), 0 0 12px ${categoryColor}80` 
+      : (!isEmpty && isSelected ? `inset 0 0 20px ${categoryColor}15, 0 2px 8px rgba(0,0,0,0.5)` : undefined),
+    transition: isTriggered ? 'none' : 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
   }
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -106,9 +118,13 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
     }
   }
 
+  const hoverText = !isEmpty && padData ? `${keyLabel} • ${padData.displayName} • ${padData.playMode === 'oneshot' ? 'One-Shot' : 'Gate'}` : ''
+  const helpProps = useContextualHelp(hoverText)
+
   return (
     <div 
-      className={`relative w-full aspect-square rounded-lg flex flex-col justify-between p-2 cursor-pointer transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-cyan)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${borderClass} ${scaleClass} ${ringClass} ${dragClass}`}
+      {...helpProps}
+      className={`relative w-full aspect-square rounded-xl flex flex-col justify-between p-2 cursor-pointer transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-cyan)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${borderClass} ${scaleClass} ${ringClass} ${dragClass}`}
       style={dynamicStyles}
       data-pad-id={padId}
       role="button"
@@ -126,7 +142,7 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
       onDrop={handleDrop}
     >
       <div className="flex justify-between w-full z-10 pointer-events-none">
-        <span className={`text-xs font-mono font-medium ${isEmpty ? 'text-[var(--text-disabled)]' : 'text-[var(--text-secondary)]'}`}>
+        <span className={`text-[10px] font-mono font-bold tracking-widest opacity-80 ${isEmpty ? 'text-[var(--text-disabled)]' : 'text-[var(--text-secondary)]'}`}>
           {keyLabel}
         </span>
         {!isEmpty && (padData.mute || padData.solo) && (
@@ -135,9 +151,9 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
       </div>
 
       {isEmpty && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-30 pointer-events-none">
-          <span className="text-2xl text-[var(--text-disabled)]">+</span>
-          {isDragOver && <span className="text-[10px] uppercase text-[var(--accent-cyan)] font-bold mt-1">Drop Sample</span>}
+        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 pointer-events-none">
+          <span className="text-3xl font-light text-[var(--text-disabled)]">+</span>
+          {isDragOver && <span className="text-[10px] capitalize text-[var(--accent-cyan)] font-bold mt-2">Drop Sample</span>}
         </div>
       )}
 
@@ -147,13 +163,13 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
 
       <div className="flex justify-between items-end w-full z-10 pointer-events-none">
         {!isEmpty && (
-          <span className="text-xs font-mono font-medium truncate max-w-[80%]"
-                style={{ color: isTriggered ? '#000' : 'var(--text-primary)' }}>
+          <span className="text-xs font-semibold tracking-wide truncate max-w-[80%]"
+                style={{ color: isTriggered ? 'rgba(0,0,0,0.8)' : 'var(--text-primary)' }}>
             {padData.displayName}
           </span>
         )}
         {!isEmpty && (
-          <span className="text-[10px]" style={{ color: isTriggered ? '#000' : categoryColor }}>
+          <span className="text-[10px] opacity-80" style={{ color: isTriggered ? 'rgba(0,0,0,0.6)' : categoryColor }}>
             {padData.playMode === 'oneshot' ? '▶' : '⊓'}
           </span>
         )}

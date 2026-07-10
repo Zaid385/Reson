@@ -7,6 +7,7 @@ export const DelayModule: React.FC<EffectModuleProps> = ({ padData, onChange }) 
   return (
     <FXModule 
       title="Delay" 
+      helpText="Repeats the signal after a specified time."
       enabled={padData.delayEnabled}
       onToggle={(enabled) => onChange({ delayEnabled: enabled })}
       onReset={() => onChange({ delayEnabled: false, delayTime: 0.25, delayFeedback: 0.4, delayWet: 0.5, delayDry: 1 })}

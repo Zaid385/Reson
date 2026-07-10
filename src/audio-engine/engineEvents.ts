@@ -1,7 +1,9 @@
-export type EngineEventType = 'voice:started' | 'voice:ended'
+export type EngineEventType = 'voice:started' | 'voice:ended' | 'preview:ended'
 export type VoiceEventPayload = { voiceId: string; padId: string }
+export type PreviewEventPayload = { assetId: string }
+export type EventPayload = VoiceEventPayload | PreviewEventPayload
 
-type EventHandler = (payload: VoiceEventPayload) => void
+type EventHandler = (payload: any) => void
 
 export class EngineEventEmitter {
   private listeners = new Map<EngineEventType, Set<EventHandler>>()
@@ -16,7 +18,7 @@ export class EngineEventEmitter {
     }
   }
 
-  emit(event: EngineEventType, payload: VoiceEventPayload) {
+  emit(event: EngineEventType, payload: any) {
     this.listeners.get(event)?.forEach(handler => handler(payload))
   }
 }

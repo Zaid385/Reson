@@ -12,14 +12,14 @@ interface FXHeaderProps {
 export const FXHeader: React.FC<FXHeaderProps> = ({ title, isExpanded, onToggleExpand, onReset, children }) => {
   return (
     <div 
-      className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-white/[0.02] transition-colors select-none group"
+      className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[var(--bg-surface-raised)] transition-all select-none group border-b border-[var(--border-subtle)]/50"
       onClick={onToggleExpand}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5">
         <ChevronRight 
-          className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+          className={`w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-all duration-200 ${isExpanded ? 'rotate-90' : ''}`}
         />
-        <span className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[var(--text-primary)] capitalize tracking-widest opacity-90 group-hover:opacity-100 transition-opacity">
           {title}
         </span>
       </div>

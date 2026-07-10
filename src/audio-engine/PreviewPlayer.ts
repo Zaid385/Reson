@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import { SampleEditParams } from './types'
 import { BufferRegistry } from './BufferRegistry'
 import { dbToLinear } from '@utils/math'
+import { engineEvents } from './engineEvents'
 
 export class PreviewPlayer {
   private player?: Tone.Player
@@ -54,6 +55,11 @@ export class PreviewPlayer {
         this.gainNode.gain.setValueAtTime(editorGain, Math.max(now, endTime - params.fadeOutMs / 1000))
         this.gainNode.gain.linearRampToValueAtTime(0, endTime)
       }
+    }
+
+    this.player.onstop = () => {
+      this.isPlaying = false
+      engineEvents.emit('preview:ended', { assetId })
     }
 
     this.isPlaying = true

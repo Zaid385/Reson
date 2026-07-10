@@ -48,6 +48,11 @@
     --accent-danger: #D32F2F;
   }
 
+  :root.light .waveform-path {
+    filter: brightness(0.3) saturate(2);
+    mix-blend-mode: multiply;
+  }
+
   body {
     @apply bg-[var(--bg-base)] text-[var(--text-primary)] font-sans m-0 p-0 overflow-hidden;
   }
@@ -67,7 +72,7 @@
     @apply font-mono text-[13px] font-medium;
   }
   .label-caps {
-    @apply font-mono text-[11px] font-bold tracking-[0.1em] uppercase text-[var(--text-secondary)];
+    @apply font-mono text-[11px] font-bold tracking-[0.1em] capitalize text-[var(--text-secondary)];
   }
 }
 
@@ -126,8 +131,9 @@
   height: 1.4em;
   width: 1.4em;
   border-radius: 50%;
-  left: 10%;
-  bottom: 12%;
+  left: 0.3em;
+  top: 50%;
+  transform: translateY(-50%);
   box-shadow: inset 6px -3px 0px 0px var(--accent-cyan);
   background: transparent;
   transition: .5s;
@@ -138,6 +144,6 @@
 }
 
 .theme-switch input:checked + .theme-slider:before {
-  transform: translateX(120%);
+  transform: translate(1.4em, -50%);
   box-shadow: inset 15px -4px 0px 15px var(--accent-amber);
 }

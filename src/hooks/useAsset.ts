@@ -20,15 +20,15 @@ export function useAsset(assetId: string | null) {
       } else if (assetId.startsWith('acoustic-kit/')) {
         // Fallback for built-in samples that aren't in the DB
         const { builtInSampleManifest } = await import('@persistence/builtInSampleManifest')
-        const url = await builtInSampleManifest.getSampleUrl(assetId)
-        if (url && isMounted) {
+        const generated = builtInSampleManifest.getGeneratedSample(assetId)
+        if (generated && isMounted) {
           setAsset({
             id: assetId,
-            name: assetId.split('/').pop() || assetId,
+            name: generated.name,
             sourceType: 'built-in',
-            durationSeconds: 1, // We don't know the exact duration without fetching
-            waveformPeaksLow: [],
-            waveformPeaksHigh: []
+            durationSeconds: generated.buffer.duration,
+            waveformPeaksLow: generated.peaks.low,
+            waveformPeaksHigh: generated.peaks.high
           })
         }
       }

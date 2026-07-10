@@ -40,10 +40,10 @@ export function AppShell() {
       </div>
       <FooterBar />
       <Suspense fallback={null}>
-        {activeModal === 'sampleEditor' && <SampleEditorModal />}
-        {activeModal === 'settings' && <SettingsModal />}
-        {activeModal === 'shortcuts' && <KeyboardShortcutsModal />}
-        {activeModal === 'projects' && <ProjectsModal />}
+        <SampleEditorModal />
+        <SettingsModal />
+        <KeyboardShortcutsModal />
+        <ProjectsModal />
       </Suspense>
       <DialogProvider />
       <OnboardingOverlay />

@@ -1,7 +1,9 @@
+import { GeneratedSample } from '@domain/procedural/BuiltInSampleGenerator'
+
 export interface BuiltInSample {
   id: string
   name: string
-  url: string
+  url: string // Still technically used by some types, but we'll use `builtin://`
 }
 
 export interface BuiltInPack {
@@ -15,27 +17,36 @@ export interface Manifest {
 }
 
 export class BuiltInSampleManifest {
-  private manifest: Manifest | null = null
+  private generatedSamples: Map<string, GeneratedSample> = new Map()
+
+  public setGeneratedSamples(samples: GeneratedSample[]) {
+    this.generatedSamples.clear()
+    samples.forEach(s => this.generatedSamples.set(s.id, s))
+  }
+
+  public getGeneratedSample(id: string): GeneratedSample | undefined {
+    return this.generatedSamples.get(id)
+  }
 
   async loadManifest(): Promise<Manifest> {
-    if (this.manifest) return this.manifest
-    
-    try {
-      const response = await fetch('/samples/manifest.json')
-      this.manifest = await response.json()
-      return this.manifest!
-    } catch (e) {
-      console.error('Failed to load built-in sample manifest', e)
-      return { packs: [] }
+    // Generate manifest from our generated samples
+    const samples = Array.from(this.generatedSamples.values())
+    const pack: BuiltInPack = {
+      id: 'factory-kit',
+      name: 'Factory Kit',
+      samples: samples.map(s => ({
+        id: s.id,
+        name: s.name,
+        url: `builtin://${s.id}`
+      }))
     }
+
+    return { packs: [pack] }
   }
 
   async getSampleUrl(sampleId: string): Promise<string | null> {
-    const manifest = await this.loadManifest()
-    for (const pack of manifest.packs) {
-      const sample = pack.samples.find(s => s.id === sampleId)
-      if (sample) return sample.url
-    }
+    const s = this.generatedSamples.get(sampleId)
+    if (s) return `builtin://${s.id}`
     return null
   }
 }

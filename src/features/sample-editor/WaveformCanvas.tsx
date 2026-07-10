@@ -88,7 +88,11 @@ export const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
     const wsRegions = ws.registerPlugin(RegionsPlugin.create())
 
     if (url) {
-      ws.load(url)
+      ws.load(url, peaks ? [peaks] : undefined, duration)
+    } else if (peaks && peaks.length > 0 && duration) {
+      // Create a minimal silent WAV data URI so WaveSurfer has a valid source to attach the peaks to
+      const dummyWav = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA='
+      ws.load(dummyWav, [peaks], duration)
     }
 
     ws.on('ready', () => {

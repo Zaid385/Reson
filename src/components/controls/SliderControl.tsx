@@ -1,4 +1,5 @@
 import React from 'react'
+import { useContextualHelp } from '@hooks/useContextualHelp'
 
 export interface SliderControlProps {
   label: string
@@ -9,35 +10,37 @@ export interface SliderControlProps {
   unit?: string
   onChange: (val: number) => void
   onDoubleClick?: () => void
+  helpText?: string
 }
 
 export const SliderControl: React.FC<SliderControlProps> = ({
-  label, value, min, max, step = 1, unit = '', onChange, onDoubleClick
+  label, value, min, max, step = 1, unit = '', onChange, onDoubleClick, helpText
 }) => {
   const percentage = ((value - min) / (max - min)) * 100
+  const helpProps = useContextualHelp(helpText || '')
 
   return (
-    <div className="flex flex-col gap-1 w-full" onDoubleClick={onDoubleClick}>
-      <div className="flex justify-between items-end">
-        <label className="text-[10px] font-bold text-[var(--text-muted)] tracking-wider uppercase">
+    <div className="flex flex-col gap-1 w-full" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>
+      <div className="flex justify-between items-end mb-1">
+        <label className="text-[10px] font-semibold text-[var(--text-secondary)] tracking-wider capitalize">
           {label}
         </label>
-        <span className="font-mono text-xs text-[var(--text-secondary)]">
+        <span className="font-mono text-[11px] font-medium text-[var(--text-primary)]">
           {value.toFixed(step < 1 ? 2 : 0)}{unit}
         </span>
       </div>
-      <div className="relative h-6 flex items-center group">
-        <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full border border-[var(--border-subtle)] pointer-events-none">
+      <div className="relative h-6 flex items-center group cursor-pointer">
+        <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] pointer-events-none overflow-hidden">
           <div 
-            className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] group-hover:bg-[var(--accent-cyan-hover)] transition-colors rounded-l-full"
+            className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] opacity-90 group-hover:opacity-100 group-hover:shadow-[0_0_8px_rgba(0,240,255,0.4)] transition-all rounded-r-full"
             style={{ width: `${percentage}%` }}
           />
         </div>
         
         {/* Slider Thumb */}
         <div 
-          className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_5px_rgba(0,0,0,0.5)] border border-[var(--border-subtle)] group-hover:scale-125 transition-transform pointer-events-none"
-          style={{ left: `calc(${percentage}% - 6px)` }}
+          className="absolute w-3.5 h-3.5 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.5),inset_0_-1px_1px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform pointer-events-none z-10"
+          style={{ left: `calc(${percentage}% - 7px)` }}
         />
 
         <input

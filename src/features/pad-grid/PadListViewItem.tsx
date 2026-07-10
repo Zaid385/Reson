@@ -124,7 +124,7 @@ export const PadListViewItem: React.FC<PadListViewItemProps> = ({ bankId, slotIn
       <div className="flex-1">
         <div className="font-medium flex items-center gap-2" style={{ color: isTriggered ? '#000' : 'var(--text-primary)' }}>
           {!isEmpty ? padData.displayName : 'Empty Pad'}
-          {isDragOver && <span className="text-[10px] uppercase text-[var(--accent-cyan)] font-bold">Drop Sample</span>}
+          {isDragOver && <span className="text-[10px] capitalize text-[var(--accent-cyan)] font-bold">Drop Sample</span>}
         </div>
         {!isEmpty && (
           <div className="text-xs flex items-center gap-2 mt-1" style={{ color: isTriggered ? '#000000B3' : 'var(--text-muted)' }}>

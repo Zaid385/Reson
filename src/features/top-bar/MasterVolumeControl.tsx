@@ -42,17 +42,17 @@ export function MasterVolumeControl() {
 
       <div className="flex items-center gap-2">
         <div className="relative w-24 h-6 flex items-center group">
-          <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full border border-[var(--border-subtle)] pointer-events-none">
+          <div className="absolute inset-x-0 h-1.5 bg-[var(--bg-base)] rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] pointer-events-none overflow-hidden">
             <div 
-              className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] group-hover:bg-[var(--accent-cyan-hover)] transition-colors rounded-l-full"
+              className="absolute inset-y-0 left-0 bg-[var(--accent-cyan)] opacity-90 group-hover:opacity-100 group-hover:shadow-[0_0_8px_rgba(0,240,255,0.4)] transition-all rounded-r-full"
               style={{ width: `${masterVolume * 100}%` }}
             />
           </div>
           
           {/* Slider Thumb */}
           <div 
-            className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_5px_rgba(0,0,0,0.5)] border border-[var(--border-subtle)] group-hover:scale-125 transition-transform pointer-events-none"
-            style={{ left: `calc(${masterVolume * 100}% - 6px)` }}
+            className="absolute w-3.5 h-3.5 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.5),inset_0_-1px_1px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform pointer-events-none z-10"
+            style={{ left: `calc(${masterVolume * 100}% - 7px)` }}
           />
 
           <input
@@ -67,9 +67,9 @@ export function MasterVolumeControl() {
         </div>
 
         {/* Master Meter */}
-        <div className="w-4 h-6 bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded flex gap-px p-px items-end overflow-hidden">
-          <div className="flex-1 bg-green-500 origin-bottom" style={{ height: '0%' }} ref={meterLeftRef} />
-          <div className="flex-1 bg-green-500 origin-bottom" style={{ height: '0%' }} ref={meterRightRef} />
+        <div className="w-4 h-6 bg-[var(--bg-base)] rounded-sm flex gap-px p-px items-end overflow-hidden shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)]">
+          <div className="flex-1 bg-[var(--accent-cyan)] opacity-80 origin-bottom transition-all duration-75 ease-out" style={{ height: '0%' }} ref={meterLeftRef} />
+          <div className="flex-1 bg-[var(--accent-cyan)] opacity-80 origin-bottom transition-all duration-75 ease-out" style={{ height: '0%' }} ref={meterRightRef} />
         </div>
       </div>
     </div>

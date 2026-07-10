@@ -69,23 +69,8 @@ export class SampleAssignmentService {
 
   async assignBuiltInSampleToPad(sampleId: string, sampleName: string, sampleUrl: string, padId: string): Promise<void> {
     try {
-      const response = await fetch(`${sampleUrl}?v=1`)
-      if (!response.ok) throw new Error('Failed to fetch built-in sample')
-      
-      const arrayBuffer = await response.arrayBuffer()
-      const audioBuffer = await this.tempContext.decodeAudioData(arrayBuffer.slice(0))
-      
-      // We use the URL as the asset ID for built-in samples since they are static
       const assetId = sampleId
       
-      // If we haven't already registered it to the engine, do so
-      // Actually, Engine might need it registered. Let's just do it.
-      try {
-        AudioEngine.registerBuffer(assetId, audioBuffer)
-      } catch (e) {
-        // Might already be registered
-      }
-
       const store = useStore.getState()
       const pad = store.pads[padId]
       if (pad?.assetId) {

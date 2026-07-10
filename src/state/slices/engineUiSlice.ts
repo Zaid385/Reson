@@ -5,6 +5,8 @@ export interface EngineUiSlice {
   triggeredPads: Record<string, boolean>
   setPadTriggered: (padId: string, triggered: boolean) => void
   isPadTriggered: (padId: string) => boolean
+  activeVoices: number
+  setActiveVoices: (count: number) => void
 }
 
 export const createEngineUiSlice: StateCreator<StoreState, [], [], EngineUiSlice> = (set, get) => ({
@@ -15,5 +17,7 @@ export const createEngineUiSlice: StateCreator<StoreState, [], [], EngineUiSlice
       [padId]: triggered
     }
   })),
-  isPadTriggered: (padId) => !!get().triggeredPads[padId]
+  isPadTriggered: (padId) => !!get().triggeredPads[padId],
+  activeVoices: 0,
+  setActiveVoices: (count) => set({ activeVoices: count })
 })

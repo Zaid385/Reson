@@ -8,6 +8,9 @@ import { projectBootstrapService } from '@persistence/ProjectBootstrapService'
 import { audioHydrationService } from '@domain/project/AudioHydrationService'
 import { ResonLogo } from '@components/branding/ResonLogo'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useStatusStore } from '@state/statusStore'
+import { BuiltInSampleGenerator } from '@domain/procedural/BuiltInSampleGenerator'
+import { builtInSampleManifest } from '@persistence/builtInSampleManifest'
 
 export function App() {
   const [isReady, setIsReady] = useState(false)
@@ -26,6 +29,11 @@ export function App() {
     async function init() {
       await AudioEngine.initialize()
       
+      useStatusStore.getState().setAppStatus('Generating Factory Kit...')
+      const generated = await BuiltInSampleGenerator.generateAll()
+      builtInSampleManifest.setGeneratedSamples(generated)
+      useStatusStore.getState().setAppStatus('Loading Project...')
+      
       // Load project state from IndexedDB
       const snapshot = await projectBootstrapService.loadActiveProject()
       
@@ -39,6 +47,7 @@ export function App() {
       await audioHydrationService.hydratePads(snapshot.pads)
 
       setIsReady(true)
+      useStatusStore.getState().setAppStatus('Ready')
     }
     
     init()
@@ -61,10 +70,10 @@ export function App() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="px-8 py-3 bg-[var(--accent-cyan)] text-black rounded-full font-bold tracking-wider uppercase text-sm hover:bg-[var(--accent-cyan-hover)] transition-colors shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_25px_rgba(0,240,255,0.5)]"
+                className="px-8 py-3 bg-[var(--accent-cyan)] text-black rounded-full font-bold tracking-wider capitalize text-sm hover:bg-[var(--accent-cyan-hover)] transition-colors shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_25px_rgba(0,240,255,0.5)]"
                 onClick={() => setHasStarted(true)}
               >
-                Start Engine
+                Dive in
               </motion.button>
             )}
             
@@ -72,7 +81,7 @@ export function App() {
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
-                className="text-[var(--text-secondary)] text-sm tracking-widest uppercase animate-pulse"
+                className="text-[var(--text-secondary)] text-sm tracking-widest capitalize animate-pulse"
               >
                 Initializing...
               </motion.div>
