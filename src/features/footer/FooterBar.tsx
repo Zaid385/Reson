@@ -1,9 +1,10 @@
+ 
 import { useEffect, useState } from 'react'
 import { useStore } from '@state/store'
 import { useStatusStore } from '@state/statusStore'
 import { motion, AnimatePresence } from 'framer-motion'
 import { KeyboardLabels } from '@state/keyMap'
-import { db } from '@persistence/db'
+
 
 export function FooterBar() {
   const appStatus = useStatusStore(state => state.appStatus)

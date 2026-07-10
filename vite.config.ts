@@ -31,7 +31,7 @@ export default defineConfig({
       '@audio-engine': path.resolve(__dirname, './src/audio-engine'),
       '@persistence': path.resolve(__dirname, './src/persistence'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@types': path.resolve(__dirname, './src/types'),
+      '@models': path.resolve(__dirname, './src/models'),
       '@config': path.resolve(__dirname, './src/config'),
       '@styles': path.resolve(__dirname, './src/styles')
     }

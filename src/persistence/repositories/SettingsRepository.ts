@@ -1,5 +1,5 @@
 import { db } from '../db'
-import { SettingsData } from '@types/models'
+import { SettingsData } from '@models/models'
 
 export class SettingsRepository {
   async getSettingsForProject(projectId: string): Promise<SettingsData | undefined> {

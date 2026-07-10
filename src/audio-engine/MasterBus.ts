@@ -15,7 +15,8 @@ export class MasterBus {
     // Add a Master Output Limiter to prevent clipping (limit at -0.1 dB)
     this.limiterNode = new Tone.Limiter(-0.1)
     
-    this.analyser = new Tone.Meter({ channels: 2 })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.analyser = new Tone.Meter({ channels: 2 } as any)
 
     // Build the master chain: Volume -> Mute -> Limiter -> Analyser -> Destination
     this.volumeNode.connect(this.muteNode)

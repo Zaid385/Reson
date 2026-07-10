@@ -141,7 +141,8 @@ export const ResonLogo: React.FC<ResonLogoProps> = ({
   return (
     <motion.div 
       className={`inline-flex items-center justify-center ${interactive ? 'cursor-pointer' : ''} ${className}`}
-      variants={wrapperVariants}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      variants={wrapperVariants as any}
       initial="idle"
       animate="idle"
       whileHover={interactive ? "hover" : "idle"}
@@ -164,23 +165,27 @@ export const ResonLogo: React.FC<ResonLogoProps> = ({
           d={PATHS.left} 
           fill="var(--accent-cyan)"
           style={{ originY: 1 }}
-          variants={leftBarVariants}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          variants={leftBarVariants as any}
         />
         <motion.path 
           d={PATHS.center} 
           fill="var(--accent-cyan)"
           style={{ originY: 1 }}
-          variants={centerBarVariants}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          variants={centerBarVariants as any}
         />
         <motion.path 
           d={PATHS.right} 
           fill="var(--accent-cyan)"
           style={{ originY: 1 }}
-          variants={rightBarVariants}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          variants={rightBarVariants as any}
         />
         <motion.path 
           d={PATHS.outerR} 
-          variants={outerRVariants}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          variants={outerRVariants as any}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

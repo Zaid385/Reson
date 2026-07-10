@@ -24,10 +24,11 @@
       "@hooks/*": ["src/hooks/*"],
       "@state/*": ["src/state/*"],
       "@domain/*": ["src/domain/*"],
+      "@audio-engine": ["src/audio-engine/index.ts"],
       "@audio-engine/*": ["src/audio-engine/*"],
       "@persistence/*": ["src/persistence/*"],
       "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"],
+      "@models/*": ["src/models/*"],
       "@config/*": ["src/config/*"],
       "@styles/*": ["src/styles/*"]
     }

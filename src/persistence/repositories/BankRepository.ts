@@ -1,5 +1,5 @@
 import { db } from '../db'
-import { BankData } from '@types/models'
+import { BankData } from '@models/models'
 
 export class BankRepository {
   async getBanksForProject(projectId: string): Promise<BankData[]> {

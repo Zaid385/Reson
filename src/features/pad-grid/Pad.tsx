@@ -29,9 +29,11 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
   const keyMapLabels = KeyboardLabels[keyboardLayout] || KeyboardLabels.qwerty
   const keyLabel = keyMapLabels[slotIndex]
 
-  if (!padData) return null
+  const isEmpty = !padData?.assetId
+  const hoverText = !isEmpty && padData ? `${keyLabel} • ${padData.displayName} • ${padData.playMode === 'oneshot' ? 'One-Shot' : 'Gate'}` : ''
+  const helpProps = useContextualHelp(hoverText)
 
-  const isEmpty = !padData.assetId
+  if (!padData) return null
   const categoryColor = padData.color || '#00F0FF'
 
   const borderClass = isEmpty 
@@ -118,8 +120,6 @@ export const Pad: React.FC<PadProps> = ({ bankId, slotIndex }) => {
     }
   }
 
-  const hoverText = !isEmpty && padData ? `${keyLabel} • ${padData.displayName} • ${padData.playMode === 'oneshot' ? 'One-Shot' : 'Gate'}` : ''
-  const helpProps = useContextualHelp(hoverText)
 
   return (
     <div 

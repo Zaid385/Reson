@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand'
 import { StoreState } from '../store'
-import { ProjectData } from '@types/models'
+import { ProjectData } from '@models/models'
 
 export interface ProjectSlice {
   activeProject: ProjectData | null

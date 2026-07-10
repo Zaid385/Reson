@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef } from 'react'
 import { useStore } from '@state/store'
 import { Copy, ClipboardPaste, Trash2, Search } from 'lucide-react'

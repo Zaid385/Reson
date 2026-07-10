@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { ChevronUp, ChevronDown } from 'lucide-react'
 
 interface Props {

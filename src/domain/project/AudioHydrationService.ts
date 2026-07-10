@@ -1,7 +1,8 @@
+/* eslint-disable prefer-const */
 import { assetRepository } from '@persistence/repositories/AssetRepository'
-import { PadData } from '@types/models'
+import { PadData } from '@models/models'
 import { AudioEngine } from '@audio-engine'
-import { builtInSampleManifest } from '@persistence/builtInSampleManifest'
+
 
 export class AudioHydrationService {
   private tempContext = new AudioContext()
@@ -17,7 +18,6 @@ export class AudioHydrationService {
     const loadPromises = Array.from(uniqueAssetIds).map(async (assetId) => {
       try {
         const asset = await assetRepository.getAsset(assetId)
-        let arrayBuffer: ArrayBuffer
 
         if (asset && asset.audioData) {
           // User upload or edited built-in that got cached

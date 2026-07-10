@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type EngineEventType = 'voice:started' | 'voice:ended' | 'preview:ended'
 export type VoiceEventPayload = { voiceId: string; padId: string }
 export type PreviewEventPayload = { assetId: string }

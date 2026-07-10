@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand'
 import { StoreState } from '../store'
-import { BankData } from '@types/models'
+import { BankData } from '@models/models'
 
 export interface BankSlice {
   banks: BankData[]

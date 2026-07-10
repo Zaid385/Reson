@@ -1,5 +1,5 @@
 import React from 'react'
-import { PadData } from '@types/models'
+import { PadData } from '@models/models'
 
 export interface EffectModuleProps {
   padData: PadData

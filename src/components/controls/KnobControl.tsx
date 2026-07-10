@@ -1,3 +1,4 @@
+ 
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useContextualHelp } from '@hooks/useContextualHelp'
 
@@ -87,7 +88,7 @@ export const KnobControl: React.FC<KnobControlProps> = ({
   
   const isZero = visibleLength === 0
   const strokeColor = isZero ? "transparent" : "var(--accent-cyan)"
-  const hoverStrokeColor = isZero ? "transparent" : "var(--accent-cyan-hover)"
+
 
   return (
     <div className="flex flex-col items-center justify-center gap-1 select-none group" onDoubleClick={onDoubleClick} {...(helpText ? helpProps : {})}>

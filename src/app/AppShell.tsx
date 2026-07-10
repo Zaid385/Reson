@@ -1,3 +1,4 @@
+ 
 import { lazy, Suspense } from 'react'
 import { TopBar } from '@features/top-bar'
 import { PadGrid, PadListView } from '@features/pad-grid'
@@ -26,7 +27,7 @@ export function AppShell() {
   useAutosave()
   
   const useListView = useStore(state => state.settings?.useListView ?? false)
-  const activeModal = useStore(state => state.activeModal)
+
   
   return (
     <div className="flex flex-col h-screen w-screen bg-[var(--bg-base)] overflow-hidden">

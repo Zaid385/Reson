@@ -1,5 +1,5 @@
 import { db } from '../db'
-import { PadData } from '@types/models'
+import { PadData } from '@models/models'
 
 export class PadRepository {
   async getPadsForBank(bankId: string): Promise<PadData[]> {
@@ -7,15 +7,14 @@ export class PadRepository {
   }
 
   async updatePad(padId: string, changes: Partial<PadData>): Promise<void> {
-    changes.updatedAt = Date.now()
+    // no updatedAt on PadData
     await db.pads.update(padId, changes)
   }
 
   async bulkUpdatePads(updates: Array<{ padId: string; changes: Partial<PadData> }>): Promise<void> {
-    const now = Date.now()
     await db.transaction('rw', db.pads, async () => {
       for (const update of updates) {
-        update.changes.updatedAt = now
+        // no updatedAt on PadData
         await db.pads.update(update.padId, update.changes)
       }
     })

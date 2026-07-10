@@ -18,7 +18,7 @@ export function useMidiController() {
 
       // Command is the upper 4 bits
       const command = data[0] >> 4
-      const channel = data[0] & 0xf
+      // const channel = data[0] & 0xf
       const note = data[1]
       const velocity = data[2]
 
@@ -55,7 +55,7 @@ export function useMidiController() {
           
           access.onstatechange = (e: Event) => {
             const connectionEvent = e as MIDIConnectionEvent
-            if (connectionEvent.port.type === 'input' && connectionEvent.port.state === 'connected') {
+            if (connectionEvent.port?.type === 'input' && connectionEvent.port?.state === 'connected') {
               const input = connectionEvent.port as MIDIInput
               input.onmidimessage = handleMidiMessage
             }

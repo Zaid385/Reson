@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { AudioEngine as IAudioEngine, PadPlaybackParams, VoiceHandle, SampleEditParams, VoiceEventPayload } from './types'
+import { AudioEngine as IAudioEngine, PadPlaybackParams, VoiceHandle, SampleEditParams, VoiceEventPayload, PadFxParams } from './types'
 import { BufferRegistry } from './BufferRegistry'
 import { VoiceManager } from './VoiceManager'
 import { MasterBus } from './MasterBus'

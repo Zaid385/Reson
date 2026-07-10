@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useStore } from '@state/store'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
 import { projectRepository } from '@persistence/repositories/ProjectRepository'
 import { db } from '@persistence/db'
-import { FullProjectSnapshot, AssetData } from '@types/models'
+import { FullProjectSnapshot } from '@models/models'
 
 export interface ExportFormat {
   formatVersion: number
@@ -137,7 +138,7 @@ export class ProjectIoService {
       const assetIdMap = new Map<string, string>()
 
       for (const exportedAsset of data.assets) {
-        let finalAssetId = exportedAsset.id
+
         
         // If it's a built-in ref, we can just use the original ID
         if (exportedAsset.sourceType === 'user-upload' && exportedAsset.audioDataBase64) {
@@ -175,7 +176,7 @@ export class ProjectIoService {
       const allPads: any[] = []
       
       for (const bank of data.banks) {
-        const oldBankId = bank.id
+
         const newBankId = crypto.randomUUID()
         bank.id = newBankId
         bank.projectId = newProjectId

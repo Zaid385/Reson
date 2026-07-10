@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie'
-import { ProjectData, BankData, PadData, AssetData, SettingsData } from '@types/models'
+import { ProjectData, BankData, PadData, AssetData, SettingsData } from '@models/models'
 
 export class ResonDatabase extends Dexie {
   projects!: Table<ProjectData, string>

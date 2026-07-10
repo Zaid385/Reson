@@ -67,7 +67,7 @@ export class SampleAssignmentService {
     }
   }
 
-  async assignBuiltInSampleToPad(sampleId: string, sampleName: string, sampleUrl: string, padId: string): Promise<void> {
+  async assignBuiltInSampleToPad(sampleId: string, sampleName: string, _sampleUrl: string, padId: string): Promise<void> {
     try {
       const assetId = sampleId
       

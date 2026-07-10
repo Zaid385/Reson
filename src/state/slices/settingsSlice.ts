@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand'
 import { StoreState } from '../store'
-import { SettingsData } from '@types/models'
+import { SettingsData } from '@models/models'
 import { settingsRepository } from '@persistence/repositories/SettingsRepository'
 
 export interface SettingsSlice {

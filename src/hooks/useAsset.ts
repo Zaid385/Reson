@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
-import { AssetData } from '@types/models'
+import { AssetData } from '@models/models'
 
 export function useAsset(assetId: string | null) {
   const [asset, setAsset] = useState<AssetData | null>(null)
@@ -21,14 +22,18 @@ export function useAsset(assetId: string | null) {
         // Fallback for built-in samples that aren't in the DB
         const { builtInSampleManifest } = await import('@persistence/builtInSampleManifest')
         const generated = builtInSampleManifest.getGeneratedSample(assetId)
-        if (generated && isMounted) {
+        if (generated) {
           setAsset({
             id: assetId,
             name: generated.name,
             sourceType: 'built-in',
+            mimeType: 'audio/wav',
             durationSeconds: generated.buffer.duration,
             waveformPeaksLow: generated.peaks.low,
-            waveformPeaksHigh: generated.peaks.high
+            waveformPeaksHigh: generated.peaks.high,
+            refCount: 1,
+            fileSizeBytes: 0,
+            createdAt: Date.now()
           })
         }
       }

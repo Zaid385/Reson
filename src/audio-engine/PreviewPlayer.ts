@@ -7,7 +7,7 @@ import { engineEvents } from './engineEvents'
 export class PreviewPlayer {
   private player?: Tone.Player
   private gainNode: Tone.Gain
-  private isPlaying: boolean = false
+
 
   constructor(
     private bufferRegistry: BufferRegistry,
@@ -58,11 +58,11 @@ export class PreviewPlayer {
     }
 
     this.player.onstop = () => {
-      this.isPlaying = false
+
       engineEvents.emit('preview:ended', { assetId })
     }
 
-    this.isPlaying = true
+
   }
 
   stop() {
@@ -71,10 +71,11 @@ export class PreviewPlayer {
       this.player.dispose()
       this.player = undefined
     }
-    this.isPlaying = false
+
   }
 
-  seek(/* positionNormalized: number */) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  seek(_positionNormalized: number) {
     // Basic stub for seeking
   }
 

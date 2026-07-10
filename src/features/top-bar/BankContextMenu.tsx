@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Copy, ClipboardPaste, Trash2, Edit2 } from 'lucide-react'
+import { Copy, ClipboardPaste, Edit2 } from 'lucide-react'
 import { bankService } from '@domain/project/BankService'
 import { showConfirmDialog } from '@utils/dialog'
 
@@ -25,12 +25,12 @@ export const BankContextMenu: React.FC<BankContextMenuProps> = ({ x, y, bankId, 
   }, [onClose])
 
   const handleCopy = () => {
-    ;(window as any).__resonBankClipboard = bankId
+    ;(window as Window & { __resonBankClipboard?: string }).__resonBankClipboard = bankId
     onClose()
   }
 
   const handlePaste = async () => {
-    const clipboardBankId = (window as any).__resonBankClipboard
+    const clipboardBankId = (window as Window & { __resonBankClipboard?: string }).__resonBankClipboard
     if (clipboardBankId) {
       const confirmed = await showConfirmDialog({
         title: 'Paste Bank',
@@ -50,7 +50,7 @@ export const BankContextMenu: React.FC<BankContextMenuProps> = ({ x, y, bankId, 
     onClose()
   }
 
-  const hasClipboard = !!(window as any).__resonBankClipboard
+  const hasClipboard = !!(window as Window & { __resonBankClipboard?: string }).__resonBankClipboard
 
   const safeX = Math.min(x, window.innerWidth - 160)
   const safeY = Math.min(y, window.innerHeight - 150)

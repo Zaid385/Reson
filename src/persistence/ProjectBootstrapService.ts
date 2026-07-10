@@ -1,10 +1,11 @@
+ 
 import { projectRepository } from './repositories/ProjectRepository'
 import { bankRepository } from './repositories/BankRepository'
 import { padRepository } from './repositories/PadRepository'
 import { settingsRepository } from './repositories/SettingsRepository'
-import { FullProjectSnapshot, ProjectData, BankData, PadData, SettingsData } from '@types/models'
+import { FullProjectSnapshot, ProjectData, BankData, PadData, SettingsData } from '@models/models'
 import { v4 as uuidv4 } from 'uuid'
-import { CURRENT_SCHEMA_VERSION } from './migrations'
+
 
 export class ProjectBootstrapService {
   async loadActiveProject(): Promise<FullProjectSnapshot> {
@@ -101,7 +102,6 @@ export class ProjectBootstrapService {
 
   async createAndSaveDefaultProject(): Promise<ProjectData> {
     const project = await projectRepository.createDefaultProject()
-    const now = Date.now()
 
     const settings: SettingsData = {
       projectId: project.id,

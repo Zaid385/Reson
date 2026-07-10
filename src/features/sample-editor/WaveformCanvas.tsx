@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useRef, useState } from 'react'
 import WaveSurfer from 'wavesurfer.js'
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js'
@@ -37,9 +38,10 @@ export const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const wavesurferRef = useRef<WaveSurfer | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wsRegionsRef = useRef<any>(null)
   const isInternalChange = useRef(false)
-  const internalChangeTimeout = useRef<NodeJS.Timeout | null>(null)
+  const internalChangeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isLight, setIsLight] = useState(false)
   const [wsReady, setWsReady] = useState(false)
 
@@ -125,6 +127,7 @@ export const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
       setWsReady(false)
       ws.destroy()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, peaks, duration, color, isLight])
 
   // Sync external marker changes (if changed via text input or cancel)

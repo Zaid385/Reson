@@ -1,7 +1,8 @@
-import React from 'react'
+ 
+
 import { useStore } from '@state/store'
 import { SliderControl, KnobControl } from '@components/controls'
-import { Power, Volume2, MicOff, Settings2, Scissors } from 'lucide-react'
+import { Volume2, MicOff, Settings2, Scissors } from 'lucide-react'
 import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
 import { effectRegistry } from './effects/effectRegistry'
 import { useContextualHelp } from '@hooks/useContextualHelp'

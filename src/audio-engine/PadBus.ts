@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import { linearToDb } from '@utils/math'
+import { PadFxParams } from './types'
 
 export class PadBus {
   public readonly volumeNode: Tone.Volume

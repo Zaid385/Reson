@@ -1,9 +1,11 @@
+ 
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState, useRef } from 'react'
 import { useStore } from '@state/store'
-import { X, FolderOpen, Plus, Trash2, Edit2, Play, Save } from 'lucide-react'
+import { X, FolderOpen, Plus, Trash2, Edit2, Play } from 'lucide-react'
 import { projectRepository } from '@persistence/repositories/ProjectRepository'
 import { projectBootstrapService } from '@persistence/ProjectBootstrapService'
-import { ProjectData } from '@types/models'
+import { ProjectData } from '@models/models'
 import { showConfirmDialog, showPromptDialog } from '@utils/dialog'
 import { db } from '@persistence/db'
 

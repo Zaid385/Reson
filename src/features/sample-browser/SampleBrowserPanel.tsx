@@ -4,7 +4,7 @@ import { SampleBrowserTabs, TabType } from './SampleBrowserTabs'
 import { SampleListItem } from './SampleListItem'
 import { builtInSampleManifest, Manifest } from '@persistence/builtInSampleManifest'
 import { assetRepository } from '@persistence/repositories/AssetRepository'
-import { AssetData } from '@types/models'
+import { AssetData } from '@models/models'
 import { AudioEngine } from '@audio-engine'
 import { useStore } from '@state/store'
 import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
@@ -48,7 +48,7 @@ export const SampleBrowserPanel: React.FC = () => {
   }, [activeTab, isSampleBrowserOpen])
 
   useEffect(() => {
-    const unsub = engineEvents.on('preview:ended', (payload: any) => {
+    const unsub = engineEvents.on('preview:ended', (payload: { assetId?: string }) => {
       // payload.assetId
       setPreviewingId(prev => {
         if (prev === payload.assetId) return null
@@ -58,7 +58,7 @@ export const SampleBrowserPanel: React.FC = () => {
     return () => unsub()
   }, [])
 
-  const handlePreviewToggle = async (sampleId: string, url?: string) => {
+  const handlePreviewToggle = async (sampleId: string) => {
     if (previewingId === sampleId) {
       AudioEngine.previewStop()
       setPreviewingId(null)
@@ -146,7 +146,7 @@ export const SampleBrowserPanel: React.FC = () => {
                   name={sample.name}
                   url={sample.url}
                   isPlaying={previewingId === sample.id}
-                  onPreviewToggle={() => handlePreviewToggle(sample.id, sample.url)}
+                  onPreviewToggle={() => handlePreviewToggle(sample.id)}
                 />
               ))}
               {builtInItems.length === 0 && (

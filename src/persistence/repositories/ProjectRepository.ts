@@ -1,5 +1,5 @@
 import { db } from '../db'
-import { ProjectData, FullProjectSnapshot } from '@types/models'
+import { ProjectData, FullProjectSnapshot } from '@models/models'
 import { v4 as uuidv4 } from 'uuid'
 import { CURRENT_SCHEMA_VERSION, runMigrations } from '../migrations'
 

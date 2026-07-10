@@ -36,17 +36,7 @@ export class BuiltInSampleGenerator {
     return buffer.get() as AudioBuffer
   }
 
-  private static getHash(seed: string): number {
-    return seed.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0)
-  }
 
-  private static getRand(seedHash: number): () => number {
-    let state = Math.abs(seedHash) || 1
-    return () => {
-      state = (state * 1664525 + 1013904223) % 4294967296
-      return state / 4294967296
-    }
-  }
 
   private static async generateKickHeavy(): Promise<AudioBuffer> {
     return this.renderOffline(0.5, () => {

@@ -1,5 +1,5 @@
 import { db } from '../db'
-import { AssetData } from '@types/models'
+import { AssetData } from '@models/models'
 import { v4 as uuidv4 } from 'uuid'
 
 export class AssetRepository {

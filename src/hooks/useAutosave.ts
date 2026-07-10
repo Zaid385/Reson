@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useStore } from '@state/store'
 import { projectRepository } from '@persistence/repositories/ProjectRepository'
-import { FullProjectSnapshot } from '@types/models'
+import { FullProjectSnapshot } from '@models/models'
 
 export function useAutosave() {
   const debounceTimerRef = useRef<number | null>(null)
