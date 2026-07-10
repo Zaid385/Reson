@@ -38,10 +38,20 @@ export class Voice {
     const now = Tone.now()
     this.envelopeGain.gain.setValueAtTime(0, now)
     
-    if (params.attackMs > 0) {
-      this.envelopeGain.gain.linearRampToValueAtTime(targetGain, now + params.attackMs / 1000)
+    const attackSecs = params.attackMs / 1000
+    const decaySecs = params.decayMs / 1000
+    const sustainGain = targetGain * params.sustainLevel
+
+    if (attackSecs > 0) {
+      this.envelopeGain.gain.linearRampToValueAtTime(targetGain, now + attackSecs)
     } else {
       this.envelopeGain.gain.setValueAtTime(targetGain, now)
+    }
+
+    if (decaySecs > 0) {
+      this.envelopeGain.gain.linearRampToValueAtTime(sustainGain, now + attackSecs + decaySecs)
+    } else if (params.sustainLevel < 1) {
+      this.envelopeGain.gain.setValueAtTime(sustainGain, now + attackSecs)
     }
 
     const duration = this.player.buffer.duration

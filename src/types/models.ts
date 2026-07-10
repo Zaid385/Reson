@@ -9,8 +9,51 @@ export interface PadData {
   pan: number
   pitchSemitones: number
   reverse: boolean
+  // Envelope (Amplitude)
   attackMs: number
+  decayMs: number
+  sustainLevel: number
   releaseMs: number
+
+  // Filter
+  filterEnabled: boolean
+  filterType: 'lowpass' | 'highpass' | 'bandpass'
+  filterFrequency: number
+  filterResonance: number
+
+  // Drive
+  driveEnabled: boolean
+  driveAmount: number
+  driveTone: number
+  driveMix: number
+
+  // Bitcrusher
+  bitcrusherEnabled: boolean
+  bitcrusherDepth: number
+  bitcrusherSampleRate: number
+  bitcrusherMix: number
+
+  // Compressor
+  compressorEnabled: boolean
+  compressorThreshold: number
+  compressorRatio: number
+  compressorMix: number
+
+  // Delay
+  delayEnabled: boolean
+  delayTime: number
+  delayFeedback: number
+  delayWet: number
+  delayDry: number
+
+  // Reverb
+  reverbEnabled: boolean
+  reverbSize: number
+  reverbDecay: number
+  reverbWet: number
+  reverbDry: number
+
+  // Misc
   mute: boolean
   solo: boolean
   playMode: 'oneshot' | 'gate'

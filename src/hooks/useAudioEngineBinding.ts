@@ -29,6 +29,38 @@ export function useAudioEngineBinding() {
           if (pad.volume !== prevPad.volume) AudioEngine.setPadVolume(pad.id, pad.volume)
           if (pad.pan !== prevPad.pan) AudioEngine.setPadPan(pad.id, pad.pan)
           
+          const fxChanged = 
+            pad.filterEnabled !== prevPad.filterEnabled ||
+            pad.filterType !== prevPad.filterType ||
+            pad.filterFrequency !== prevPad.filterFrequency ||
+            pad.filterResonance !== prevPad.filterResonance ||
+            pad.driveEnabled !== prevPad.driveEnabled ||
+            pad.driveAmount !== prevPad.driveAmount ||
+            pad.driveTone !== prevPad.driveTone ||
+            pad.driveMix !== prevPad.driveMix ||
+            pad.bitcrusherEnabled !== prevPad.bitcrusherEnabled ||
+            pad.bitcrusherDepth !== prevPad.bitcrusherDepth ||
+            pad.bitcrusherSampleRate !== prevPad.bitcrusherSampleRate ||
+            pad.bitcrusherMix !== prevPad.bitcrusherMix ||
+            pad.compressorEnabled !== prevPad.compressorEnabled ||
+            pad.compressorThreshold !== prevPad.compressorThreshold ||
+            pad.compressorRatio !== prevPad.compressorRatio ||
+            pad.compressorMix !== prevPad.compressorMix ||
+            pad.delayEnabled !== prevPad.delayEnabled ||
+            pad.delayTime !== prevPad.delayTime ||
+            pad.delayFeedback !== prevPad.delayFeedback ||
+            pad.delayWet !== prevPad.delayWet ||
+            pad.delayDry !== prevPad.delayDry ||
+            pad.reverbEnabled !== prevPad.reverbEnabled ||
+            pad.reverbSize !== prevPad.reverbSize ||
+            pad.reverbDecay !== prevPad.reverbDecay ||
+            pad.reverbWet !== prevPad.reverbWet ||
+            pad.reverbDry !== prevPad.reverbDry
+
+          if (fxChanged) {
+            AudioEngine.setPadFx(pad.id, pad)
+          }
+          
           if (resolvedAudibility) {
             const isAudible = resolvedAudibility.get(pad.id)
             AudioEngine.setPadMute(pad.id, !isAudible)

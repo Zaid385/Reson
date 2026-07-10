@@ -3,6 +3,7 @@ import { useStore } from '@state/store'
 import { SliderControl, KnobControl } from '@components/controls'
 import { Power, Volume2, MicOff, Settings2, Scissors } from 'lucide-react'
 import { ResponsiveDrawer } from '@components/layout/ResponsiveDrawer'
+import { effectRegistry } from './effects/effectRegistry'
 
 const COLORS = [
   '#00F0FF', '#C3F400', '#FF007A', '#FFB020', 
@@ -143,23 +144,18 @@ export function ParameterPanel() {
             />
           </div>
 
-          {/* Envelope */}
-          <div className="p-4 flex flex-col gap-6 bg-[var(--bg-base)]">
-            <h3 className="label-caps mb-2 text-white/50">Envelope</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <KnobControl 
-                label="Attack" 
-                value={padData.attackMs} 
-                onChange={(v) => updatePad(padData.id, { attackMs: v })} 
-                min={0} max={2000} step={10} unit="ms" 
-              />
-              <KnobControl 
-                label="Release" 
-                value={padData.releaseMs} 
-                onChange={(v) => updatePad(padData.id, { releaseMs: v })} 
-                min={0} max={5000} step={10} unit="ms" 
-              />
-            </div>
+          {/* FX Rack */}
+          <div className="flex flex-col bg-[var(--bg-elevated)]">
+            {effectRegistry.map((effect) => {
+              const EffectComponent = effect.component
+              return (
+                <EffectComponent 
+                  key={effect.id}
+                  padData={padData} 
+                  onChange={(updates) => updatePad(padData.id, updates)} 
+                />
+              )
+            })}
           </div>
 
         </div>

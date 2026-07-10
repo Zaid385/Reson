@@ -72,6 +72,10 @@ export class AudioEngineImpl implements IAudioEngine {
     this.getPadBus(padId).setPan(pan)
   }
 
+  setPadFx(padId: string, params: Partial<PadFxParams>): void {
+    this.getPadBus(padId).setFx(params)
+  }
+
   setPadMute(padId: string, muted: boolean): void {
     this.getPadBus(padId).setMute(muted)
   }

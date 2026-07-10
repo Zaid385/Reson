@@ -7,10 +7,46 @@ export interface PadPlaybackParams {
   pitchSemitones: number
   gainDb: number // baked "editor" gain, distinct from live pad volume
   attackMs: number
+  decayMs: number
+  sustainLevel: number
   releaseMs: number
   fadeInMs: number
   fadeOutMs: number
   playMode: 'oneshot' | 'gate'
+}
+
+export interface PadFxParams {
+  filterEnabled: boolean
+  filterType: 'lowpass' | 'highpass' | 'bandpass'
+  filterFrequency: number
+  filterResonance: number
+  
+  driveEnabled: boolean
+  driveAmount: number
+  driveTone: number
+  driveMix: number
+
+  bitcrusherEnabled: boolean
+  bitcrusherDepth: number
+  bitcrusherSampleRate: number
+  bitcrusherMix: number
+
+  compressorEnabled: boolean
+  compressorThreshold: number
+  compressorRatio: number
+  compressorMix: number
+
+  delayEnabled: boolean
+  delayTime: number
+  delayFeedback: number
+  delayWet: number
+  delayDry: number
+
+  reverbEnabled: boolean
+  reverbSize: number
+  reverbDecay: number
+  reverbWet: number
+  reverbDry: number
 }
 
 export interface VoiceHandle {
@@ -52,6 +88,7 @@ export interface AudioEngine {
   setPadVolume(padId: string, volume: number): void
   setPadPan(padId: string, pan: number): void
   setPadMute(padId: string, muted: boolean): void
+  setPadFx(padId: string, params: Partial<PadFxParams>): void
   setMasterVolume(volume: number): void
   setMasterMute(muted: boolean): void
 

@@ -124,7 +124,7 @@ export const ProjectsModal: React.FC = () => {
         aria-labelledby="projects-title"
       >
         <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
-          <h2 id="projects-title" className="text-xl font-bold text-white flex items-center gap-2">
+          <h2 id="projects-title" className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <FolderOpen className="w-5 h-5 text-[var(--accent-cyan)]" />
             Project Manager
           </h2>
@@ -137,7 +137,7 @@ export const ProjectsModal: React.FC = () => {
             </button>
             <div className="w-px h-6 bg-[var(--border-subtle)] mx-2" />
             <button 
-              className="p-2 hover:bg-[var(--bg-surface-raised)] rounded-lg text-[var(--text-muted)] hover:text-white transition-colors"
+              className="p-2 hover:bg-[var(--bg-surface-raised)] rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               onClick={closeModal}
               aria-label="Close projects"
             >
@@ -153,10 +153,10 @@ export const ProjectsModal: React.FC = () => {
               return (
                 <div 
                   key={project.id}
-                  className={`flex items-center justify-between p-4 rounded-lg border transition-colors ${
+                  className={`flex items-center justify-between p-4 rounded-lg border transition-colors bg-[var(--kit-list-bg)] ${
                     isActive 
-                      ? 'bg-[var(--bg-surface-raised)] border-[var(--accent-cyan)]/30' 
-                      : 'bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--text-muted)]'
+                      ? 'border-[var(--accent-cyan)]' 
+                      : 'border-[var(--border-subtle)] hover:border-[var(--text-muted)]'
                   }`}
                 >
                   <div className="flex-1 flex flex-col items-start overflow-hidden mr-4">
@@ -164,7 +164,7 @@ export const ProjectsModal: React.FC = () => {
                       <input
                         ref={editInputRef}
                         type="text"
-                        className="w-full max-w-xs bg-[var(--bg-base)] border border-[var(--accent-cyan)] rounded px-2 py-1 text-white focus:outline-none"
+                        className="w-full max-w-xs bg-[var(--bg-base)] border border-[var(--accent-cyan)] rounded px-2 py-1 text-[var(--text-primary)] focus:outline-none"
                         value={editName}
                         onChange={e => setEditName(e.target.value)}
                         onBlur={saveRename}
@@ -173,7 +173,7 @@ export const ProjectsModal: React.FC = () => {
                       />
                     ) : (
                       <div className="flex items-center gap-3 w-full">
-                        <span className={`font-semibold text-lg truncate ${isActive ? 'text-[var(--accent-cyan)]' : 'text-white'}`}>
+                        <span className={`font-semibold text-lg truncate ${isActive ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-primary)]'}`}>
                           {project.name}
                         </span>
                         {isActive && (
@@ -199,7 +199,7 @@ export const ProjectsModal: React.FC = () => {
                       </button>
                     )}
                     <button 
-                      className="p-2 hover:bg-[var(--bg-surface-raised)] text-[var(--text-muted)] hover:text-white rounded-lg transition-colors"
+                      className="p-2 hover:bg-[var(--bg-surface-raised)] text-[var(--text-muted)] hover:text-[var(--text-primary)] rounded-lg transition-colors"
                       onClick={(e) => startEditing(project, e)}
                       title="Rename Project"
                     >

@@ -12,17 +12,19 @@ export function triggerPadAction(padId: string, velocity: number = 1) {
 
   const handle = AudioEngine.triggerPad(padId, {
     assetId: padData.assetId,
-    startMarker: padData.startMarker,
-    endMarker: padData.endMarker,
-    reverse: padData.reverse,
-    loop: padData.loop,
-    pitchSemitones: padData.pitchSemitones,
-    gainDb: padData.gainDb,
-    attackMs: padData.attackMs,
-    releaseMs: padData.releaseMs,
-    fadeInMs: padData.fadeInMs,
-    fadeOutMs: padData.fadeOutMs,
-    playMode: padData.playMode
+    startMarker: padData.startMarker ?? 0,
+    endMarker: padData.endMarker ?? 1,
+    reverse: padData.reverse ?? false,
+    loop: padData.loop ?? false,
+    pitchSemitones: padData.pitchSemitones ?? 0,
+    gainDb: padData.gainDb ?? 0,
+    attackMs: padData.attackMs ?? 0,
+    decayMs: padData.decayMs ?? 0,
+    sustainLevel: padData.sustainLevel ?? 1,
+    releaseMs: padData.releaseMs ?? 50,
+    fadeInMs: padData.fadeInMs ?? 0,
+    fadeOutMs: padData.fadeOutMs ?? 0,
+    playMode: padData.playMode ?? 'oneshot'
   }, velocity)
 
   if (padData.playMode === 'oneshot') {

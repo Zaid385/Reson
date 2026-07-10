@@ -7,10 +7,15 @@
     --bg-base: #0F0F0F;
     --bg-surface: #1A1A1A;
     --bg-surface-raised: #252525;
+    --bg-elevated: #2A2A2A;
     --border-subtle: #333333;
     --text-primary: #E5E2E1;
     --text-secondary: #A0A0A0;
     --text-disabled: #5A5A64;
+    
+    --settings-modal-bg: var(--bg-base);
+    --settings-card-bg: var(--bg-surface);
+    --kit-list-bg: var(--bg-surface);
     --accent-cyan: #00F0FF;
     --accent-cyan-hover: #7DF4FF;
     --accent-lime: #C3F400;
@@ -20,6 +25,27 @@
 
     --font-family: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  :root.light {
+    --bg-base: #F0F0F0;
+    --bg-surface: #C8C8C8;
+    --bg-surface-raised: #B5B5B5;
+    --bg-elevated: #A8A8A8;
+    --border-subtle: #999999;
+    --text-primary: #1A1A1A;
+    --text-secondary: #5A5A64;
+    --text-disabled: #A0A0A0;
+    
+    --settings-modal-bg: var(--bg-surface);
+    --settings-card-bg: var(--bg-base);
+    --kit-list-bg: #FFFFFF;
+    --accent-cyan: #00A3AD;
+    --accent-cyan-hover: #00D3E0;
+    --accent-lime: #93B800;
+    --accent-pink: #D60066;
+    --accent-amber: #D6931A;
+    --accent-danger: #D32F2F;
   }
 
   body {
@@ -64,4 +90,54 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Theme Toggle Switch */
+.theme-switch {
+  font-size: 14px;
+  position: relative;
+  display: inline-block;
+  width: 3.5em;
+  height: 2em;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-surface-raised);
+  transition: .5s;
+  border-radius: 30px;
+  border: 1px solid var(--border-subtle);
+}
+
+.theme-slider:before {
+  position: absolute;
+  content: "";
+  height: 1.4em;
+  width: 1.4em;
+  border-radius: 50%;
+  left: 10%;
+  bottom: 12%;
+  box-shadow: inset 6px -3px 0px 0px var(--accent-cyan);
+  background: transparent;
+  transition: .5s;
+}
+
+.theme-switch input:checked + .theme-slider {
+  background-color: var(--bg-surface-raised);
+}
+
+.theme-switch input:checked + .theme-slider:before {
+  transform: translateX(120%);
+  box-shadow: inset 15px -4px 0px 15px var(--accent-amber);
 }

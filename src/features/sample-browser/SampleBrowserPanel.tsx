@@ -44,7 +44,21 @@ export const SampleBrowserPanel: React.FC = () => {
     }
   }, [activeTab, isSampleBrowserOpen])
 
-  if (!isSampleBrowserOpen) return null
+  if (!isSampleBrowserOpen) {
+    return (
+      <aside 
+        className="hidden lg:flex w-12 bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex-col items-center py-4 shrink-0 cursor-pointer hover:bg-[var(--bg-surface-raised)] transition-colors" 
+        onClick={toggleSampleBrowser}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-muted)]">
+          <path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path>
+          <path d="M14 2v6h6"></path>
+          <path d="m3 12.5 3 3 3-3"></path>
+          <path d="M6 15.5v-8"></path>
+        </svg>
+      </aside>
+    )
+  }
 
   const handlePreviewToggle = async (sampleId: string, url?: string) => {
     if (previewingId === sampleId) {

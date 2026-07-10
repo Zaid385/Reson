@@ -61,13 +61,13 @@ export const SettingsModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       {exportPromptOpen ? (
-        <div className="w-full max-w-sm bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col p-6 space-y-4">
-          <h3 className="text-lg font-bold text-white">Export Project</h3>
+        <div className="w-full max-w-sm bg-[var(--settings-modal-bg)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col p-6 space-y-4">
+          <h3 className="text-lg font-bold text-[var(--text-primary)]">Export Project</h3>
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Project Name</label>
             <input 
               type="text" 
-              className="w-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded px-3 py-2 text-white focus:outline-none focus:border-[var(--accent-cyan)] transition-colors"
+              className="w-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-cyan)] transition-colors"
               value={exportName}
               onChange={e => setExportName(e.target.value)}
               autoFocus
@@ -79,7 +79,7 @@ export const SettingsModal: React.FC = () => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button 
-              className="px-4 py-2 rounded font-medium text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-surface-raised)] transition-colors"
+              className="px-4 py-2 rounded font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-raised)] transition-colors"
               onClick={() => setExportPromptOpen(false)}
             >
               Cancel
@@ -94,18 +94,18 @@ export const SettingsModal: React.FC = () => {
         </div>
       ) : (
         <div 
-          className="w-full max-w-2xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col max-h-[90vh]"
+          className="w-full max-w-2xl bg-[var(--settings-modal-bg)] border border-[var(--border-subtle)] rounded-xl shadow-2xl flex flex-col max-h-[90vh]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="settings-title"
         >
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-subtle)]">
-            <h2 id="settings-title" className="text-xl font-bold text-white flex items-center gap-2">
+            <h2 id="settings-title" className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
               <SlidersHorizontal className="w-5 h-5 text-[var(--accent-cyan)]" />
               Project Settings
             </h2>
             <button 
-              className="p-2 hover:bg-[var(--bg-surface-raised)] rounded-lg text-[var(--text-muted)] hover:text-white transition-colors"
+              className="p-2 hover:bg-[var(--bg-surface-raised)] rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               onClick={closeModal}
               aria-label="Close settings"
             >
@@ -117,15 +117,15 @@ export const SettingsModal: React.FC = () => {
             
             <section className="space-y-4">
               <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Project Management</h3>
-              <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
+              <div className="bg-[var(--settings-card-bg)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-white font-medium">Export Project</div>
+                    <div className="text-[var(--text-primary)] font-medium">Export Project</div>
                     <div className="text-sm text-[var(--text-muted)]">Download this project and all its samples as a single file.</div>
                   </div>
                   <button 
                     onClick={handleExportClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors shrink-0"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg transition-colors shrink-0"
                   >
                     <Upload className="w-4 h-4" /> Export
                   </button>
@@ -135,12 +135,12 @@ export const SettingsModal: React.FC = () => {
 
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-white font-medium">Import Project</div>
+                    <div className="text-[var(--text-primary)] font-medium">Import Project</div>
                     <div className="text-sm text-[var(--text-muted)]">Load a previously exported .json project file.</div>
                   </div>
                   <button 
                     onClick={handleImportClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-white rounded-lg transition-colors shrink-0"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-surface-raised)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg transition-colors shrink-0"
                   >
                     <Download className="w-4 h-4" /> Import
                   </button>
@@ -160,10 +160,10 @@ export const SettingsModal: React.FC = () => {
                 <Save className="w-4 h-4" /> Workflow
               </h3>
               
-              <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
+              <div className="bg-[var(--settings-card-bg)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
                 <label className="flex items-center justify-between gap-4 cursor-pointer">
                   <div>
-                    <div className="text-white font-medium">Confirm sample replacement</div>
+                    <div className="text-[var(--text-primary)] font-medium">Confirm sample replacement</div>
                     <div className="text-sm text-[var(--text-muted)]">Show a confirmation prompt when dropping a sample onto an occupied pad.</div>
                   </div>
                   <div className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${settings.confirmBeforeReplace ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
@@ -181,11 +181,11 @@ export const SettingsModal: React.FC = () => {
 
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-white font-medium">Keyboard Layout</div>
+                    <div className="text-[var(--text-primary)] font-medium">Keyboard Layout</div>
                     <div className="text-sm text-[var(--text-muted)]">Choose the layout that matches your physical keyboard to update pad labels.</div>
                   </div>
                   <select 
-                    className="bg-[var(--bg-base)] border border-[var(--border-subtle)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent-cyan)] transition-colors shrink-0"
+                    className="bg-[var(--bg-base)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent-cyan)] transition-colors shrink-0"
                     value={settings.keyboardLayout || 'qwerty'}
                     onChange={(e) => updateSettings({ keyboardLayout: e.target.value as 'qwerty' | 'azerty' | 'qwertz' })}
                   >
@@ -202,10 +202,10 @@ export const SettingsModal: React.FC = () => {
               <Keyboard className="w-4 h-4" /> Accessibility
             </h3>
             
-            <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
+            <div className="bg-[var(--settings-card-bg)] border border-[var(--border-subtle)] rounded-lg p-4 space-y-4">
               <label className="flex items-center justify-between gap-4 cursor-pointer">
                 <div>
-                  <div className="text-white font-medium">Use List View (Screen Reader Friendly)</div>
+                  <div className="text-[var(--text-primary)] font-medium">Use List View (Screen Reader Friendly)</div>
                   <div className="text-sm text-[var(--text-muted)]">Replaces the 2D pad grid with a linear list structure optimized for screen readers and keyboard navigation.</div>
                 </div>
                 <div className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${settings.useListView ? 'bg-[var(--accent-cyan)]' : 'bg-[var(--bg-surface-raised)]'}`}>
@@ -226,14 +226,14 @@ export const SettingsModal: React.FC = () => {
               <Trash2 className="w-4 h-4" /> Danger Zone
             </h3>
             
-            <div className="bg-[var(--bg-surface)] border border-[var(--accent-danger)]/20 rounded-lg p-4 space-y-4">
+            <div className="bg-[var(--settings-card-bg)] border border-[var(--accent-danger)]/20 rounded-lg p-4 space-y-4">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <div className="text-white font-medium">Reset App</div>
+                  <div className="text-[var(--text-primary)] font-medium">Reset App</div>
                   <div className="text-sm text-[var(--text-muted)]">Clear all projects, pads, and custom samples. This cannot be undone.</div>
                 </div>
                 <button 
-                  className="px-4 py-2 bg-[var(--accent-danger)]/10 text-[var(--accent-danger)] hover:bg-[var(--accent-danger)] hover:text-white rounded-lg transition-colors font-medium shrink-0"
+                  className="px-4 py-2 bg-[var(--accent-danger)]/10 text-[var(--accent-danger)] hover:bg-[var(--accent-danger)] hover:text-[var(--text-primary)] rounded-lg transition-colors font-medium shrink-0"
                   onClick={async () => {
                     const confirmed = await showConfirmDialog({
                       title: 'Reset App',

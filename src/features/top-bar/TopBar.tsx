@@ -1,6 +1,7 @@
 import { BankSelector } from './BankSelector'
 import { SaveStatusIndicator } from './SaveStatusIndicator'
 import { MasterVolumeControl } from './MasterVolumeControl'
+import { ThemeToggle } from '@components/controls'
 import { Settings2, FolderOpen } from 'lucide-react'
 import { useStore } from '@state/store'
 
@@ -16,6 +17,8 @@ export function TopBar() {
         <SaveStatusIndicator />
       </div>
       <div className="flex items-center h-full gap-4">
+        <ThemeToggle />
+        <div className="h-6 w-px bg-[var(--border-subtle)]" />
         <MasterVolumeControl />
         <div className="h-6 w-px bg-[var(--border-subtle)]" />
         <button 

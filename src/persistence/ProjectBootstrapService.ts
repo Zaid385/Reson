@@ -20,7 +20,12 @@ export class ProjectBootstrapService {
     let pads: PadData[] = []
     for (const bank of banks) {
       const bankPads = await padRepository.getPadsForBank(bank.id)
-      pads = pads.concat(bankPads)
+      // Hydrate with defaults in case of older schema versions
+      const hydratedPads = bankPads.map(pad => ({
+        ...this.createDefaultPad(pad.bankId, pad.slotIndex),
+        ...pad
+      }))
+      pads = pads.concat(hydratedPads)
     }
 
     return {
@@ -28,6 +33,69 @@ export class ProjectBootstrapService {
       settings: settings!,
       banks,
       pads
+    }
+  }
+
+  createDefaultPad(bankId: string, slot: number): PadData {
+    return {
+      id: `${bankId}:${slot}`,
+      bankId,
+      slotIndex: slot,
+      assetId: null,
+      displayName: '',
+      color: '#00F0FF',
+      volume: 0.8,
+      pan: 0,
+      pitchSemitones: 0,
+      reverse: false,
+      attackMs: 0,
+      decayMs: 0,
+      sustainLevel: 1,
+      releaseMs: 50,
+      
+      filterEnabled: false,
+      filterType: 'lowpass',
+      filterFrequency: 20000,
+      filterResonance: 0,
+
+      driveEnabled: false,
+      driveAmount: 0,
+      driveTone: 20000,
+      driveMix: 1,
+
+      bitcrusherEnabled: false,
+      bitcrusherDepth: 8,
+      bitcrusherSampleRate: 44100,
+      bitcrusherMix: 1,
+
+      compressorEnabled: false,
+      compressorThreshold: -24,
+      compressorRatio: 4,
+      compressorMix: 1,
+
+      delayEnabled: false,
+      delayTime: 0.25,
+      delayFeedback: 0.4,
+      delayWet: 0.5,
+      delayDry: 1,
+
+      reverbEnabled: false,
+      reverbSize: 0.7,
+      reverbDecay: 3,
+      reverbWet: 0.5,
+      reverbDry: 1,
+
+      mute: false,
+      solo: false,
+      playMode: 'oneshot',
+      startMarker: 0,
+      endMarker: 1,
+      loop: false,
+      fadeInMs: 0,
+      fadeOutMs: 0,
+      gainDb: 0,
+      normalizeApplied: false,
+      chokeGroup: null
     }
   }
 
@@ -61,31 +129,7 @@ export class ProjectBootstrapService {
       })
 
       for (let slot = 0; slot < 32; slot++) {
-        pads.push({
-          id: `${bankId}:${slot}`,
-          bankId,
-          slotIndex: slot,
-          assetId: null,
-          displayName: '',
-          color: '#00F0FF',
-          volume: 0.8,
-          pan: 0,
-          pitchSemitones: 0,
-          reverse: false,
-          attackMs: 0,
-          releaseMs: 50,
-          mute: false,
-          solo: false,
-          playMode: 'oneshot',
-          startMarker: 0,
-          endMarker: 1,
-          loop: false,
-          fadeInMs: 0,
-          fadeOutMs: 0,
-          gainDb: 0,
-          normalizeApplied: false,
-          chokeGroup: null
-        })
+        pads.push(this.createDefaultPad(bankId, slot))
       }
     }
 
